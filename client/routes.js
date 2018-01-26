@@ -4,7 +4,9 @@ import {Route, Switch, Router} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
 import {Main, Login, Signup, UserHome,
-  AllEvents, EventDetail, AddEventForm, EditEventForm } from './components'
+  AllEvents, EventDetail, AddEventForm, EditEventForm,
+  AllOrganizations, OrganizationDetail, AddOrganizationForm, EditOrganizationForm,
+ } from './components'
 import {me} from './store'
 
 /**
@@ -30,6 +32,10 @@ class Routes extends Component {
             <Route exact path="/events/:id/edit" component={EditEventForm} />
             <Route exact path="/events/:id" component={EventDetail} />
             <Route exact path="/events" component={AllEvents} />
+            <Route exact path="/organizations/add" component={AddOrganizationForm} />
+            <Route exact path="/organizations/:id/edit" component={EditOrganizationForm} />
+            <Route exact path="/organizations/:id" component={OrganizationDetail} />
+            <Route exact path="/organizations" component={AllOrganizations} />
             {
               isLoggedIn &&
                 <Switch>
