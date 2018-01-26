@@ -21,7 +21,8 @@ class EventDetail extends Component {
     const { event, isAdmin, isLoggedIn, posts } = this.props;
     return (
       <div>
-        {isAdmin && <Segment>
+        {isAdmin &&
+        <Segment>
           <Button as={Link} to={'/events/' + event.id + '/edit'} floated="right">Edit this event</Button>
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
@@ -38,7 +39,7 @@ class EventDetail extends Component {
                 </Item.Content>
               </Item>
             </Segment>
-            <Segment>
+            <Segment style={{ backgroundColor: '#edeeef', width: '50%' }}>
               <EventFeed posts={posts} />
             </Segment>
           </div>
