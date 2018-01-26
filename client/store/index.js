@@ -5,12 +5,13 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import user from './user'
 import events from './events'
 import event from './event'
+import posts from './posts'
 
 const reducer = combineReducers({
   user,
   events,
   event,
-
+  posts
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,
