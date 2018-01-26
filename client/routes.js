@@ -3,7 +3,8 @@ import {connect} from 'react-redux'
 import {Route, Switch, Router} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import history from './history'
-import {Main, Login, Signup, UserHome} from './components'
+import {Main, Login, Signup, UserHome,
+  AllEvents, EventDetail, AddEventForm, EditEventForm } from './components'
 import {me} from './store'
 
 /**
@@ -15,7 +16,7 @@ class Routes extends Component {
   }
 
   render () {
-    const {isLoggedIn} = this.props
+    const {isLoggedIn, isAdmin} = this.props
 
     return (
       <Router history={history}>
@@ -24,6 +25,11 @@ class Routes extends Component {
             {/* Routes placed here are available to all visitors */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            {/* <Route exact path="/events/search/:keyword" component={EventsBySearch} /> */}
+            <Route exact path="/events/add" component={AddEventForm} />
+            <Route exact path="/events/:id/edit" component={EditEventForm} />
+            <Route exact path="/events/:id" component={EventDetail} />
+            <Route exact path="/events" component={AllEvents} />
             {
               isLoggedIn &&
                 <Switch>
@@ -47,7 +53,8 @@ const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    isAdmin: (state.user.role && state.user.role === 'admin'),
   }
 }
 
