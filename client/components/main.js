@@ -20,6 +20,7 @@ const Main = (props) => {
       <Menu fixed="top" size="large" inverted>
         <Container>
           <Menu.Item as={Link} to="/home" header>
+            MYSO
             {/* <Image size="small" src="/logo.png" style={{ marginRight: '1.5em' }} /> */}
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
