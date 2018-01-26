@@ -14,7 +14,8 @@ class EventDetail extends Component {
 
   componentDidMount() {
     this.props.loadEventDetail();
-    this.props.getEventPosts(this.props.event.id)
+    this.props.getEventPosts();
+    // console.log('evtnnnnnttt id', this.props.event.id)
   }
 
   render() {
@@ -57,12 +58,12 @@ const mapState = ({user, event, posts }) => ({
   posts
 });
 
-const mapDispatch = (dispatch, ownProps, eventId) => ({
+const mapDispatch = (dispatch, ownProps) => ({
   loadEventDetail: () => {
     return dispatch(fetchEventDetail(ownProps.match.params.id));
   },
   getEventPosts: () => {
-    return dispatch(getEventPosts(eventId))
+    return dispatch(getEventPosts(ownProps.match.params.id))
   }
 });
 
