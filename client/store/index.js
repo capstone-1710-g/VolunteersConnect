@@ -6,12 +6,14 @@ import user from './user'
 import events from './events'
 import event from './event'
 import posts from './posts'
+import textPost from './text-post'
 
 const reducer = combineReducers({
   user,
   events,
   event,
-  posts
+  posts,
+  textPost
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,

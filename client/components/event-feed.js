@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { Feed } from 'semantic-ui-react'
+import React from 'react';
 import YouTube from 'react-youtube';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Segment } from 'semantic-ui-react';
 
 const EventFeed = (props) => {
 
@@ -12,7 +11,7 @@ const EventFeed = (props) => {
     const data = getChatMessages(props.posts)
 
     return (
-        <div style={{}}>
+        <Segment>
             {
                 data.map(post => {
                     return (
@@ -22,7 +21,7 @@ const EventFeed = (props) => {
                     )
                 })
             }
-        </div>
+        </Segment>
     )
 
 }
@@ -33,7 +32,7 @@ function renderPost(post) {
             // <video controls>
             //     <source src={post.content} type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
             // </video>
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Card.Header>
                         {post.user}
@@ -47,7 +46,7 @@ function renderPost(post) {
         )
     } else if (post.type === 'image') {
         return (
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Image floated='left' size='mini' src={post.userImage} />
                     <Card.Header floated='right'>
@@ -64,7 +63,7 @@ function renderPost(post) {
         )
     } else {
         return (
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Image floated='left' size='mini' src={post.userImage} />
                     <Card.Header floated='right'>
