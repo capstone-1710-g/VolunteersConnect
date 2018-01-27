@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addEvent } from '../store/events';
-import { fetchEventDetail, editEventDetail } from '../store/event';
+import { addOrganization } from '../store/organizations';
+import { fetchOrganizationDetail, editOrganizationDetail } from '../store/organization';
 import { Form, Segment } from 'semantic-ui-react';
 
-class EventForm extends Component {
+class OrganizationForm extends Component {
   constructor(props) {
     super(props);
     this.state = props.initialValues;
@@ -17,7 +17,7 @@ class EventForm extends Component {
   }
 
   componentWillReceiveProps() {
-    this.setState(this.props.event);
+    this.setState(this.props.organization);
   }
 
   handleChange(name) {
@@ -50,7 +50,7 @@ class EventForm extends Component {
         <h1>{displayName}</h1>
         <Segment>
           <div>
-            <Form name={name} onSubmit={(event) => handleSubmit(event, this.state)}>
+            <Form name={name} onSubmit={(e) => handleSubmit(e, this.state)}>
               {fields.map(field => this.renderInputField(field))}
               <div>
                 <Form.Button>{displayName}</Form.Button>
@@ -67,50 +67,50 @@ class EventForm extends Component {
  * CONTAINER
  */
 const fields = [
-  { name: 'title', label: 'Title' },
+  { name: 'name', label: 'Organization Name' },
   { name: 'description', label: 'Description' },
 ];
 
 const mapAddFormState = (state) => ({
-  name: 'add-event',
-  displayName: 'Add a New Event',
-  initialValues: {title: '', description: ''},
-  event: { title: '', description: ''},
+  name: 'add-organization',
+  displayName: 'Add a New Organization',
+  initialValues: {name: '', description: ''},
+  event: { name: '', description: ''},
   fields: fields,
   // error: state.user.error
 });
 
 const mapEditFormState = (state) => ({
-  name: 'edit-event',
-  displayName: 'Update Event',
-  initialValues: { title: '', description: ''},
+  name: 'edit-organization',
+  displayName: 'Update Organization',
+  initialValues: { name: '', description: ''},
   event: state.event,
   fields: fields,
 });
 
 const mapAddFormDispatch = (dispatch) => ({
   load: () => ({}),
-  handleSubmit: (e, event) => {
+  handleSubmit: (e, organization) => {
     e.preventDefault();
-    dispatch(addEvent(event));
+    dispatch(addOrganization(organization));
   },
 });
 
 const mapEditFormDispatch = (dispatch, ownProps) => ({
-  load: () => dispatch(fetchEventDetail(ownProps.match.params.id)),
-  handleSubmit: (e, event) => {
+  load: () => dispatch(fetchOrganizationDetail(ownProps.match.params.id)),
+  handleSubmit: (e, organization) => {
     e.preventDefault();
-    dispatch(editEventDetail(event));
+    dispatch(editOrganizationDetail(organization));
   },
 });
 
-export const AddEventForm = connect(mapAddFormState, mapAddFormDispatch)(EventForm);
-export const EditEventForm = connect(mapEditFormState, mapEditFormDispatch)(EventForm);
+export const AddEventForm = connect(mapAddFormState, mapAddFormDispatch)(OrganizationForm);
+export const EditEventForm = connect(mapEditFormState, mapEditFormDispatch)(OrganizationForm);
 
 /**
  * PROP TYPES
  */
-EventForm.propTypes = {
+OrganizationForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
