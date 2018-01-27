@@ -8,14 +8,14 @@ import event from './event'
 import organizations from './organizations'
 import organization from './organization'
 import posts from './posts'
+import textPost from './text-post'
 
 const reducer = combineReducers({
   user,
   events,
   event,
-  organizations,
-  organization,
   posts,
+  textPost
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,

@@ -6,6 +6,7 @@ import { Item, Header, Segment, Button, Divider} from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
+import PostForm from './post-form';
 
 
 /* -----------------    COMPONENT     ------------------ */
@@ -14,7 +15,7 @@ class EventDetail extends Component {
 
   componentDidMount() {
     this.props.loadEventDetail();
-    this.props.getEventPosts(this.props.event.id)
+    this.props.getEventPosts();
   }
 
   render() {
@@ -27,7 +28,7 @@ class EventDetail extends Component {
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
         {event.id && (
-          <div>
+          <Segment.Group horizontal>
             <Segment>
               <Item>
                 <Header as="h1" dividing>{event.title}</Header>
@@ -41,8 +42,9 @@ class EventDetail extends Component {
             </Segment>
             <Segment style={{ backgroundColor: '#edeeef', width: '50%' }}>
               <EventFeed posts={posts} />
+              <PostForm event={event} />
             </Segment>
-          </div>
+          </Segment.Group>
         )}
       </div>)
   }
@@ -57,12 +59,12 @@ const mapState = ({user, event, posts }) => ({
   posts
 });
 
-const mapDispatch = (dispatch, ownProps, eventId) => ({
+const mapDispatch = (dispatch, ownProps) => ({
   loadEventDetail: () => {
     return dispatch(fetchEventDetail(ownProps.match.params.id));
   },
   getEventPosts: () => {
-    return dispatch(getEventPosts(eventId))
+    return dispatch(getEventPosts(ownProps.match.params.id))
   }
 });
 

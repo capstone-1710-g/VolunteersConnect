@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
-import { Feed } from 'semantic-ui-react'
+import React from 'react';
 import YouTube from 'react-youtube';
-import { Card, Image } from 'semantic-ui-react';
+import { Card, Image, Segment } from 'semantic-ui-react';
 
 const EventFeed = (props) => {
 
+    const getChatMessages = (data) => {
+        return data ? Object.keys(data).map(key => data[key]) : []
+    }
+
+    const data = getChatMessages(props.posts)
 
     return (
-        <div style={{}}>
+        <Segment>
             {
-                props.posts.map(post => {
+                data.map(post => {
                     return (
                         <div key={post.id}>
                             {renderPost(post)}
@@ -17,7 +21,7 @@ const EventFeed = (props) => {
                     )
                 })
             }
-        </div>
+        </Segment>
     )
 
 }
@@ -28,7 +32,7 @@ function renderPost(post) {
             // <video controls>
             //     <source src={post.content} type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
             // </video>
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Card.Header>
                         {post.user}
@@ -42,7 +46,7 @@ function renderPost(post) {
         )
     } else if (post.type === 'image') {
         return (
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Image floated='left' size='mini' src={post.userImage} />
                     <Card.Header floated='right'>
@@ -59,7 +63,7 @@ function renderPost(post) {
         )
     } else {
         return (
-            <Card style={{ marginTop: 10, width: '100%' }}>
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
                     <Image floated='left' size='mini' src={post.userImage} />
                     <Card.Header floated='right'>
@@ -80,22 +84,3 @@ function renderPost(post) {
 }
 export default EventFeed;
 
-
-    // renderPost() {
-    //     this.props.posts.map(post => {
-    //         return (
-    //             <Feed.Event>
-    //                 <Feed.Label>
-    //                     {/* <img src='/assets/images/avatar/small/elliot.jpg' /> */}
-    //                 </Feed.Label>
-    //                 <Feed.Content>
-    //                     <Feed.Summary>
-    //                         <Feed.User>USER</Feed.User> 
-    //                         <Feed.Date>{post.time}</Feed.Date>
-    //                         <Feed.Extra>{post.content}</Feed.Extra>
-    //                     </Feed.Summary>
-    //                 </Feed.Content>
-    //             </Feed.Event>
-    //         )
-    //     })
-    // }
