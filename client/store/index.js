@@ -2,6 +2,7 @@ import {createStore, combineReducers, applyMiddleware} from 'redux'
 import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { reducer as reduxFormReducer } from 'redux-form'
 import user from './user'
 import events from './events'
 import event from './event'
@@ -11,13 +12,14 @@ import posts from './posts'
 import textPost from './text-post'
 
 const reducer = combineReducers({
+  form: reduxFormReducer,
   user,
   events,
   event,
   posts,
   textPost,
   organizations,
-  organization
+  organization,
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,

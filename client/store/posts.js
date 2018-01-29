@@ -17,9 +17,8 @@ export const getPostsSuccess = (posts) => {
 export const getEventPosts = (eventId) => {
     return (dispatch) => {
         console.log(eventId)
-        const query = firebase.database().ref('/posts').orderByChild('eventId').equalTo(eventId); 
+        const query = firebase.database().ref('/posts').orderByChild('eventId').equalTo(eventId);
         query.on('value', snapshot => {
-            console.log('snappshootttttt', snapshot.val())
             dispatch(getPostsSuccess(snapshot.val() || {}))
         });
     }
