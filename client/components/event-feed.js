@@ -13,13 +13,13 @@ const EventFeed = (props) => {
     return (
         <Segment>
             {
-                data.map(post => {
+                data.length > 0 ? data.map(post => {
                     return (
                         <div key={post.id}>
                             {renderPost(post)}
                         </div>
                     )
-                })
+                }) : <h1>No Posts!</h1>
             }
         </Segment>
     )
@@ -27,7 +27,7 @@ const EventFeed = (props) => {
 }
 
 function renderPost(post) {
-    if (post.type === 'video') {
+    if (post.type === 'youtube') {
         return (
             // <video controls>
             //     <source src={post.content} type='video/mp4;codecs="avc1.42E01E, mp4a.40.2"' />
@@ -44,7 +44,7 @@ function renderPost(post) {
                 />
             </Card>
         )
-    } else if (post.type === 'image') {
+    } else if (post.type.includes('image')) {
         return (
             <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
                 <Card.Content>
@@ -56,9 +56,22 @@ function renderPost(post) {
                         {post.time}
                     </Card.Meta>
                 </Card.Content>
-                <Image src={post.content} fluid rounded 
-                // style={{ paddingLeft: 50, paddingRight: 50, backgroundColor: 'white'}} 
+                <Image src={post.url} fluid rounded
                 />
+            </Card>
+        )
+    } else if (post.type.includes('video')) {
+        return (
+            
+            <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
+                <Card.Content>
+                    <Card.Header>
+                        {post.user}
+                    </Card.Header>
+                </Card.Content>
+                <video controls width="100%" height="auto">
+                    <source src={post.url} type={post.type} />
+                </video>
             </Card>
         )
     } else {

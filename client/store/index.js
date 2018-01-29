@@ -15,7 +15,9 @@ const reducer = combineReducers({
   events,
   event,
   posts,
-  textPost
+  textPost,
+  organizations,
+  organization
 })
 const middleware = composeWithDevTools(applyMiddleware(
   thunkMiddleware,

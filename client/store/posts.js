@@ -17,13 +17,10 @@ export const getPostsSuccess = (posts) => {
 export const getEventPosts = (eventId) => {
     return (dispatch) => {
         console.log(eventId)
-        const query = firebase.database().ref('/posts').orderByChild('eventId').equalTo(Number(eventId)); 
-               // console.log('ref', ref)
+        const query = firebase.database().ref('/posts').orderByChild('eventId').equalTo(eventId); 
         query.on('value', snapshot => {
             console.log('snappshootttttt', snapshot.val())
-            // let posts = !Array.isArray(snapshot.val()) ? [snapshot.val()] : snapshot.val();
-            // console.log('posttttsssssss', posts)
-            dispatch(getPostsSuccess(snapshot.val()))
+            dispatch(getPostsSuccess(snapshot.val() || {}))
         });
     }
 }
