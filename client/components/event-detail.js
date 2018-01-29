@@ -22,11 +22,12 @@ class EventDetail extends Component {
     const { event, isAdmin, isLoggedIn, posts } = this.props;
     return (
       <div>
-        {isAdmin &&
+        {event.id &&
         <Segment>
           <Button as={Link} to={'/events/' + event.id + '/edit'} floated="right">Edit this event</Button>
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
+
         {event.id && (
           <Segment.Group horizontal>
             <Segment>
