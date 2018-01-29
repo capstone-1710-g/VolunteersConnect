@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../history';
+import firebase from 'firebase';
 
 /**
  * ACTION TYPES
@@ -28,12 +29,15 @@ const addNewEvent = event => ({type: ADD_NEW_EVENT, event})
  * THUNK CREATORS
  */
 export const fetchEvents = () => dispatch => {
-  const fakeEvents = [
-    {id: 1, title: 'Event 1', description: 'blah blah'},
-    {id: 2, title: 'Event 2', description: 'blah blah'},
-  ];
-  dispatch(getEvents(fakeEvents));
+  firebase.database().ref('/events')
+  .on('value', snapshot => {
+    dispatch(getEvents(snapshot.val()));
+  })
 }
+  // const fakeEvents = [
+  //   {id: 1, title: 'Event 1', description: 'blah blah'},
+  //   {id: 2, title: 'Event 2', description: 'blah blah'},
+  // ];
 
 export const fetchProductsByKeyword = keyword => dispatch =>
   axios.get(`/api/events/search/${keyword}`)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Button, TextArea, Icon } from 'semantic-ui-react';
+import { Form, Button, TextArea, Icon, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { messageChanged, sendPostThunk } from '../store/text-post';
+import { messageChanged, sendPostThunk, sendMediaThunk } from '../store/text-post';
 
 
 class PostForm extends Component {
@@ -10,10 +10,17 @@ class PostForm extends Component {
         this.props.sendPostThunk(this.props.textPost.post, this.props.event.id)
     }
 
+    handleSubmit(e) {
+        e.preventDefault()
+        // let file = e.target.upload.files[0];
+        console.log('fillllllllee', e.target.upload.files[0])
+        this.props.sendMediaThunk(e.target.upload.files[0], this.props.event.id)
+    }
+
     render() {
         console.log('propingtonnnnsss', this.props)
         return (
-            <Form reply>
+            <Form reply onSubmit={this.handleSubmit.bind(this)}>
                 <TextArea
                     placeholder="Send a post!"
                     onChange={(e, text) => this.props.messageChanged(text.value)}
@@ -24,11 +31,18 @@ class PostForm extends Component {
                     style={{ marginTop: 10, backgroundColor: '#53c66c', color: 'white' }}
                     onClick={() => this.handlePost()}
                 />
+                <Input type="file"
+                    accept="video/*" 
+                    name="upload" 
+                    
+                 />
                 <Button content='+ Photo/Video'
                     labelPosition='right'
                     icon='camera'
                     style={{ marginTop: 10 }}
                     primary
+                    type="submit"
+                    
                 />
             </Form>
         )
@@ -52,5 +66,5 @@ const mapStateToProps = ({ textPost }) => {
 //     }
 // }
 
-const PostFormContainer = connect(mapStateToProps, {messageChanged, sendPostThunk})(PostForm);
+const PostFormContainer = connect(mapStateToProps, {messageChanged, sendPostThunk, sendMediaThunk })(PostForm);
 export default PostFormContainer;

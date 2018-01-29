@@ -47,7 +47,8 @@ class Organizations extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapAllOrganizationsState = ({ user, organizations }) => ({
-  user, organizations,
+  user,
+  organizations: Object.keys(organizations).map(id => ({ ...organizations[id], id })),
   displayName: 'All Organizations',
   isAdmin: user && user.role === 'admin',
 });

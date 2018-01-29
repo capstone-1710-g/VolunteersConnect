@@ -56,7 +56,7 @@ const mapState = ({user, event, posts }) => ({
   event,
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
-  posts
+  posts: Object.keys(posts).map(id => ({ ...posts[id], id })),
 });
 
 const mapDispatch = (dispatch, ownProps) => ({

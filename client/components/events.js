@@ -14,11 +14,15 @@ class Events extends Component {
   }
 
   render() {
+    console.log('propppssssss', this.props)
     const { events, displayName, isAdmin } = this.props;
     return (
       <div>
         {/* {this.user && this.user.isAdmin &&  */}
-        {isAdmin && <Segment>
+        {
+          // isAdmin 
+          events
+          && <Segment>
           <Button as={Link} to="/events/add" floated="right">Add a new event</Button>
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
@@ -49,7 +53,8 @@ class Events extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapAllEventsState = ({ user, events }) => ({
-  user, events,
+  user,
+  events: Object.keys(events).map(id => ({...events[id], id})),
   displayName: 'All Events',
   isAdmin: user && user.role === 'admin',
 });

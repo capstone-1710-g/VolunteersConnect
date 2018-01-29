@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../history';
+import firebase from 'firebase';
 
 /**
  * ACTION TYPES
@@ -26,11 +27,10 @@ const addNewOrganization = organization => ({ type: ADD_NEW_ORGANIZATION, organi
  * THUNK CREATORS
  */
 export const fetchOrganizations = () => dispatch => {
-  const fakeOrganizations = [
-    {id: 1, name: 'Organization 1', description: 'blah blah'},
-    { id: 2, name: 'Organization 2', description: 'blah blah'},
-  ];
-  dispatch(getOrganizations(fakeOrganizations));
+  firebase.database().ref('/organizations')
+  .on('value', snapshot => {
+    dispatch(getOrganizations(snapshot.val()));
+  })
 }
 
 // export const fetchProductsByKeyword = keyword => dispatch =>
