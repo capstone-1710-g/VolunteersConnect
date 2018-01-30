@@ -8,25 +8,10 @@ import { Field, reduxForm } from 'redux-form';
 import { InputField, TextAreaField } from 'react-semantic-redux-form';
 
 class EventForm extends Component {
-  constructor(props) {
-    super(props);
-    // this.state = props.initialValues;
-    // this.handleChange = this.handleChange.bind(this);
-  }
 
   componentDidMount() {
     this.props.load();
   }
-
-  // componentWillReceiveProps() {
-  //   this.setState(this.props.event);
-  // }
-
-  // handleChange(name) {
-  //   return e => {
-  //     this.setState({[name]: e.target.value});
-  //   };
-  // }
 
   renderInputField({ name, label, placeholder }) {
     return (

@@ -49,7 +49,7 @@ const mapState = ({ user, organization }) => ({
   isLoggedIn: !!user.id,
 });
 
-const mapDispatch = (dispatch, ownProps, eventId) => ({
+const mapDispatch = (dispatch, ownProps) => ({
   loadOrganizationDetail: () => {
     return dispatch(fetchOrganizationDetail(ownProps.match.params.id));
   },

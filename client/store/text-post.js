@@ -58,6 +58,16 @@ export const sendPostThunk = (post, eventId) => {
     }
 }
 
+const storeReference = (downloadUrl, eventId, type) => {
+  let media = {
+    type,
+    eventId: eventId,
+    url: downloadUrl
+  }
+  firebase.database().ref('/posts').push(media)
+
+}
+
 export const sendMediaThunk = (file, eventId) => {
     return (dispatch) => {
         const storageRef = firebase.storage().ref('media').child(file.name);
@@ -71,16 +81,6 @@ export const sendMediaThunk = (file, eventId) => {
         })
         dispatch({ type: MEDIA_POST_SUCCESS })
     }
-}
-
-const storeReference = (downloadUrl, eventId, type) => {
-    let media = {
-        type,
-        eventId: eventId,
-        url: downloadUrl
-    }
-    firebase.database().ref('/posts').push(media)
-
 }
 
 //REDUCER

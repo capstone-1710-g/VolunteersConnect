@@ -17,7 +17,7 @@ const Main = (props) => {
 
   return (
     <div>
-      <Menu fixed="top" size="medium" borderless style={{ backgroundColor: '#dce2e8' }} stackable>
+      <Menu fixed="top" size="large" borderless style={{ backgroundColor: '#dce2e8' }} stackable>
         <Container>
           <Menu.Item as={Link} to="/home" header>
             {/* MYSO */}
@@ -25,9 +25,6 @@ const Main = (props) => {
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
           <Menu.Item as={Link} to="/organizations">Organizations</Menu.Item>
-          {/* {isLoggedIn && <Menu.Item as={Link} to={'/orders/users/' + user.id}>My Orders</Menu.Item>}
-          {isAdmin && <Menu.Item as={Link} to="/orders">All Orders</Menu.Item>}
-          {isAdmin && <Menu.Item as={Link} to="/users">Users</Menu.Item>} */}
           <div className="right menu">
             <Menu.Item>
               <SearchBar />

@@ -26,11 +26,11 @@ class Organizations extends Component {
             <Segment style={{ width: '70%'}}>
               <Item.Group divided>
                 {organizations.map(organization => (
-                  <Item className='org-list-item' key={organization.id} color="grey" href={'/organizations/' + organization.id}>
-                    <Item.Image size='small' src={organization.imageUrl} style={{margin: 'auto'}} />
+                  <Item className="org-list-item" key={organization.id} color="grey" href={'/organizations/' + organization.id}>
+                    <Item.Image size="small" src={organization.imageUrl} style={{margin: 'auto'}} />
 
                     <Item.Content>
-                      <Item.Header href={'/organizations/' + organization.id}>{organization.name}</Item.Header>
+                      <Item.Header>{organization.name}</Item.Header>
                       <Item.Meta>Description</Item.Meta>
                       <Item.Description>
                         {organization.description}
@@ -41,8 +41,7 @@ class Organizations extends Component {
                 ))}
               </Item.Group>
             </Segment>
-            <Segment style={{ width: '30%' }}>
-            </Segment>
+            <Segment style={{ width: '30%' }} />
           </Segment.Group>
         )}
       </div>
