@@ -14,7 +14,6 @@ class Events extends Component {
   }
 
   render() {
-    console.log('propppssssss', this.props)
     const { events, displayName, isAdmin } = this.props;
     return (
       <div>
@@ -30,12 +29,13 @@ class Events extends Component {
         {events.length > 0 && (
           <Card.Group>
             {events.map(event => (
-            <Card key={event.id} raised color="grey" link>
+              <Card key={event.id} raised color="grey" link>
               <Image src={event.imageURL} href={'/events/' + event.id} />
               <Card.Content href={'/events/' + event.id}>
                 <Card.Header>
                   {event.title}
                 </Card.Header>
+                <Image src={event.imageUrl} fluid />
                 <Card.Description as="h4">
                 {event.description}
                 </Card.Description>

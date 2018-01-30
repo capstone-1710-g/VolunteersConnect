@@ -17,11 +17,11 @@ const Main = (props) => {
 
   return (
     <div>
-      <Menu fixed="top" size="large" inverted>
+      <Menu fixed="top" size="medium" borderless style={{ backgroundColor: '#dce2e8' }} stackable>
         <Container>
           <Menu.Item as={Link} to="/home" header>
-            MYSO
-            {/* <Image size="small" src="/logo.png" style={{ marginRight: '1.5em' }} /> */}
+            {/* MYSO */}
+            <Image style={{ height: '5.5em', width: 'auto' }} src="/logo.png"  />
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
           <Menu.Item as={Link} to="/organizations">Organizations</Menu.Item>
