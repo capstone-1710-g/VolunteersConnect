@@ -12,9 +12,6 @@ const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
 
-const zipcodes = require('./utility/search');
-
-console.log('lookup result: ', zipcodes.byRadius(10308, 6));
 module.exports = app
 
 /**

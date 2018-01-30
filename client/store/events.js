@@ -1,4 +1,3 @@
-import axios from 'axios';
 import history from '../history';
 import firebase from 'firebase';
 
@@ -6,7 +5,7 @@ import firebase from 'firebase';
  * ACTION TYPES
  */
 const GET_EVENTS = 'GET_EVENTS';
-// const GET_EVENTS_BY_CATEGORY = 'GET_EVENTS_BY_CATEGORY';
+const GET_EVENTS_BY_CATEGORY = 'GET_EVENTS_BY_CATEGORY';
 const GET_EVENTS_BY_KEYWORD = 'GET_EVENTS_BY_KEYWORD';
 const ADD_NEW_EVENT = 'ADD_NEW_EVENT';
 
@@ -15,9 +14,9 @@ const ADD_NEW_EVENT = 'ADD_NEW_EVENT';
  */
 const getEvents = events => ({ type: GET_EVENTS, events });
 
-// const getEventsByCategory = events => ({
-//   type: GET_EVENTS_BY_CATEGORY, events,
-// });
+const getEventsByCategory = events => ({
+  type: GET_EVENTS_BY_CATEGORY, events,
+});
 
 const getEventsByKeyword = events => ({
   type: GET_EVENTS_BY_KEYWORD, events,

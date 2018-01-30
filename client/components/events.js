@@ -25,23 +25,23 @@ class Events extends Component {
         </Segment>}
         <h1>{displayName}</h1>
         {events.length > 0 && (
-          <Item.Group>
-            {events.map(event => (
-              <Item key={event.id} color="grey">
-              <Image src={event.imageURL} href={'/events/' + event.id} />
-              <Item.Content href={'/events/' + event.id}>
-                <Item.Header>
-                  {event.title}
-                </Item.Header>
-                <Image src={event.imageUrl} />
-                <Item.Description as="h4">
-                {event.description}
-                </Item.Description>
-                </Item.Content>
-            </Item>
-
-            ))}
-          </Item.Group>
+          <Segment raised>
+            <Item.Group divided>
+              {events.map(event => (
+                <Item key={event.id} color="grey" href={'/events/' + event.id}>
+                <Item.Image size="small" src={event.imageUrl} />
+                <Item.Content>
+                  <Item.Header>
+                    {event.title}
+                  </Item.Header>
+                  <Item.Description>
+                  {event.description}
+                  </Item.Description>
+                  </Item.Content>
+              </Item>
+              ))}
+            </Item.Group>
+          </Segment>
         )}
       </div>
     );

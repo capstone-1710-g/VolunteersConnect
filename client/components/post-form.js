@@ -1,103 +1,74 @@
-import React, { Component } from 'react';
-import { Form, Button, TextArea, Icon, Input } from 'semantic-ui-react';
+import React from 'react';
+import { Form, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { messageChanged, sendPostThunk, sendMediaThunk } from '../store/text-post';
-import { Field, reduxForm } from 'redux-form';
+import { sendPost } from '../store/post';
+import { Field, reduxForm, reset } from 'redux-form';
 import { InputField, TextAreaField } from 'react-semantic-redux-form';
 
+const adaptFileEventToValue = delegate =>
+  e => delegate(e.target.files[0])
 
-class PostForm extends Component {
-  handlePost() {
-      this.props.sendPostThunk(this.props.textPost.post, this.props.event.id)
-  }
+const FileInput = ({
+  input: {
+    value: omitValue,
+  onChange,
+  onBlur,
+  ...inputProps,
+  },
+  meta: omitMeta,
+  ...props,
+}) =>
+  (<input
+    onChange={adaptFileEventToValue(onChange)}
+    onBlur={adaptFileEventToValue(onBlur)}
+    type="file"
+    {...inputProps}
+    {...props}
+  />);
 
-  handleSubmit(e) {
-      e.preventDefault()
-      this.props.sendMediaThunk(e.target.upload.files[0], this.props.event.id)
-  }
 
-  render() {
-    const { handleSubmit, handlePost, fields, submitSucceeded, error } = this.props;
-    return (
-      <Form reply onSubmit={this.handleSubmit.bind(this)}>
-        <TextArea
-          placeholder="Send a post!"
-          onChange={(e, text) => this.props.messageChanged(text.value)}
+const PostForm = props => {
+  const { event, handleSubmit, handlePost, error } = props;
+  return (
+    <Form
+      reply style={{display: 'flex', flexDirection: 'column'}}
+    onSubmit={handleSubmit(values => handlePost(values, event.id))}>
+        <Field
+          name="content"
+          placeholder="Write something..."
+          component={TextAreaField}
         />
-        <Button
+      <Field
+        component={FileInput}
+        name="file"
+      />
+        {/* <Input
+          name="file"
+          type="file"
+          accept="video/*"
+        /> */}
+        <Form.Button
           content="Post"
           labelPosition="right"
           icon="send"
-          style={{ marginTop: 10, backgroundColor: '#53c66c', color: 'white' }}
-          onClick={() => this.handlePost()}
-        />
-        <Input
-          type="file"
-          accept="video/*"
-          name="upload"
-        />
-        <Button
-          content="+ Photo/Video"
-          labelPosition="right"
-          icon="camera"
           style={{ marginTop: 10 }}
           primary
           type="submit"
         />
-      </Form>
-    )
-  }
-
-  // render() {
-  //   return (
-  //     <Form reply onSubmit={this.handleSubmit.bind(this)}>
-  //       <TextArea
-  //         placeholder="Send a post!"
-  //         onChange={(e, text) => this.props.messageChanged(text.value)}
-  //       />
-  //       <Button
-  //         content="Post"
-  //         labelPosition="right"
-  //         icon="send"
-  //         style={{ marginTop: 10, backgroundColor: '#53c66c', color: 'white' }}
-  //         onClick={() => this.handlePost()}
-  //       />
-  //       <Input
-  //         type="file"
-  //         accept="video/*"
-  //         name="upload"
-  //         />
-  //       <Button
-  //         content="+ Photo/Video"
-  //         labelPosition="right"
-  //         icon="camera"
-  //         style={{ marginTop: 10 }}
-  //         primary
-  //         type="submit"
-  //       />
-  //     </Form>
-  //   )
-  // }
+    </Form>
+  )
 }
 
-const mapStateToProps = ({ textPost }) => {
-    return {
-        textPost
-    }
-}
+const mapStateToProps = ({ post }) => ({ post });
 
 const mapDispatchToProps = (dispatch) => ({
-  messageChanged: (data) => {
-    dispatch(messageChanged(data))
+  handlePost: (values, eventId) => {
+    const {file, content} = values;
+    dispatch(sendPost(content, file, eventId));
+    dispatch(reset('postForm'));
   },
-  sendPostThunk: (content, eventId) => {
-    dispatch(sendPostThunk(content, eventId))
-  },
-  sendMediaThunk: (file, eventId) => {
-    dispatch(sendMediaThunk(file, eventId))
-  },
-})
+});
 
-// wire up redux-form
-const PostFormContainer = connect(mapStateToProps, mapDispatchToProps)(PostForm);
-export default PostFormContainer;
+export default reduxForm({
+  form: 'postForm',
+})(connect(mapStateToProps, mapDispatchToProps)(PostForm));

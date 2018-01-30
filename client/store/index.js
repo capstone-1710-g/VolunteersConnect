@@ -9,7 +9,7 @@ import event from './event'
 import organizations from './organizations'
 import organization from './organization'
 import posts from './posts'
-import textPost from './text-post'
+import post from './post'
 
 const reducer = combineReducers({
   form: reduxFormReducer,
@@ -17,7 +17,7 @@ const reducer = combineReducers({
   events,
   event,
   posts,
-  textPost,
+  post,
   organizations,
   organization,
 })
