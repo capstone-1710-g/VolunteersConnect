@@ -13,7 +13,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        loader: 'babel-loader'
+        loaders: [{loader: 'babel-loader', query: { presets: ['env', 'react'] }}]
       }
     ]
   },

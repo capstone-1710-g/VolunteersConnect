@@ -11,7 +11,7 @@ const EventFeed = (props) => {
     const data = getChatMessages(props.posts)
 
     return (
-        <Segment>
+        <Segment style={{ maxHeight: 500, overflow: 'auto' }}>
             {
                 data.length > 0 ? data.map(post => {
                     return (
@@ -22,6 +22,7 @@ const EventFeed = (props) => {
                 }) : <h1>No Posts!</h1>
             }
         </Segment>
+        
     )
 
 }
