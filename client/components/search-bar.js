@@ -42,11 +42,14 @@ class SearchBar extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapDispatch = (dispatch) => ({
-  searchEvents: (keyword) => {
-    dispatch(fetchEventsByKeyword(keyword));
-    history.push('/events/search/' + keyword);
+  searchEvents: () => {
+    //console.log(zipcodes);
+    // dispatch(fetchEventsByKeyword(keyword));
+    // history.push('/events/search/' + keyword);
+
   }
 });
 
 export default connect(null, mapDispatch)(SearchBar);
+
 
