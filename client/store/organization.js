@@ -20,11 +20,6 @@ export const fetchOrganizationDetail = (organizationId) => dispatch => {
   const fakeOrganization = { id: organizationId, name: 'Organization ' + organizationId, description: 'blah blah' };
   return dispatch(getOrganizationDetail(fakeOrganization));
 }
-  // axios.get('/api/events/' + eventId)
-  // .then(res => {
-  //   return dispatch(getEventDetail(res.data))
-  // })
-  // .catch(err => console.log(err))
 
 export const editOrganizationDetail = organization => dispatch =>
   axios.put('/api/organizations/' + organization.id, organization)
