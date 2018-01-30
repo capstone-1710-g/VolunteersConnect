@@ -24,12 +24,11 @@ export const fetchEventDetail = (eventId) => dispatch => {
   );
 }
 
-export const editEventDetail = event => dispatch =>
-  axios.put('/api/events/' + event.id, event)
-  .then(res => {
-    dispatch(updateEventDetail(res.data));
-    history.push('/events/' + event.id);
-  })
+export const editEventDetail = event => dispatch => {
+  const ref = firebase.database().ref('/events').child(event.id);
+  ref.update(event);
+  history.push('/events/' + event.id);
+}
 
 
 /**
