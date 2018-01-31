@@ -14,7 +14,7 @@ const socketio = require('socket.io')
 
 const zipcodes = require('./utility/search');
 
-console.log('lookup result: ', zipcodes.byRadius(10308, 6));
+zipcodes.zipcodesInfoToJson();
 module.exports = app
 
 /**
