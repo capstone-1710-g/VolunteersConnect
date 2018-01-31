@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchEventDetail } from '../store/event';
-import { Item, Header, Segment, Button, Divider} from 'semantic-ui-react';
+import { Item, Header, Segment, Button, Divider, Image } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
@@ -22,19 +22,20 @@ class EventDetail extends Component {
     const { event, isAdmin, isLoggedIn, posts } = this.props;
     return (
       <div>
-        {isAdmin &&
+        {event.id &&
         <Segment>
           <Button as={Link} to={'/events/' + event.id + '/edit'} floated="right">Edit this event</Button>
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
+
         {event.id && (
           <Segment.Group horizontal>
-            <Segment>
+            <Segment style={{ width: '50%' }}>
               <Item>
                 <Header as="h1" dividing>{event.title}</Header>
+                <Image src={event.imageUrl} fluid />
                 <Item.Content>
                   {isAdmin && <Item.Content as="h4">Event ID: {event.id}</Item.Content>}
-                  <Item.Image size="large" src={event.imageURL} />
                   <Item.Meta as="h4">Description</Item.Meta>
                   <Item.Description as={Markdown}>{event.description}</Item.Description>
                 </Item.Content>
@@ -56,7 +57,7 @@ const mapState = ({user, event, posts }) => ({
   event,
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
-  posts
+  posts: Object.keys(posts).map(id => ({ ...posts[id], id })),
 });
 
 const mapDispatch = (dispatch, ownProps) => ({

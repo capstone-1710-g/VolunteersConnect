@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   fetchEvents,
 } from '../store/events';
-import { Button, Segment, Divider, Card, Image } from 'semantic-ui-react'
+import { Button, Segment, Divider, Item, Image } from 'semantic-ui-react'
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -17,29 +17,31 @@ class Events extends Component {
     const { events, displayName, isAdmin } = this.props;
     return (
       <div>
-        {/* {this.user && this.user.isAdmin &&  */}
-        {isAdmin && <Segment>
+        {
+          events
+          && <Segment>
           <Button as={Link} to="/events/add" floated="right">Add a new event</Button>
           <Divider horizontal>Admin Only</Divider>
         </Segment>}
         <h1>{displayName}</h1>
         {events.length > 0 && (
-          <Card.Group>
-            {events.map(event => (
-            <Card key={event.id} raised color="grey" link>
-              <Image src={event.imageURL} href={'/events/' + event.id} />
-              <Card.Content href={'/events/' + event.id}>
-                <Card.Header>
-                  {event.title}
-                </Card.Header>
-                <Card.Description as="h4">
-                {event.description}
-                </Card.Description>
-                </Card.Content>
-            </Card>
-
-            ))}
-          </Card.Group>
+          <Segment raised>
+            <Item.Group divided>
+              {events.map(event => (
+                <Item key={event.id} color="grey" href={'/events/' + event.id}>
+                <Item.Image size="small" src={event.imageUrl} />
+                <Item.Content>
+                  <Item.Header>
+                    {event.title}
+                  </Item.Header>
+                  <Item.Description>
+                  {event.description}
+                  </Item.Description>
+                  </Item.Content>
+              </Item>
+              ))}
+            </Item.Group>
+          </Segment>
         )}
       </div>
     );
@@ -49,7 +51,8 @@ class Events extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapAllEventsState = ({ user, events }) => ({
-  user, events,
+  user,
+  events: Object.keys(events).map(id => ({...events[id], id})),
   displayName: 'All Events',
   isAdmin: user && user.role === 'admin',
 });

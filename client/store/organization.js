@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../history';
+import firebase from 'firebase';
 
 /**
  * ACTION TYPES
@@ -17,21 +18,17 @@ const updateOrganizationDetail = organization => ({ type: UPDATE_ORGANIZATION_DE
  * THUNK CREATORS
  */
 export const fetchOrganizationDetail = (organizationId) => dispatch => {
-  const fakeOrganization = { id: organizationId, name: 'Organization ' + organizationId, description: 'blah blah' };
-  return dispatch(getOrganizationDetail(fakeOrganization));
+  const ref = firebase.database().ref('/organizations').child(organizationId);
+  ref.on('value', snapshot =>
+    dispatch(getOrganizationDetail(snapshot.val()))
+  );
 }
-  // axios.get('/api/events/' + eventId)
-  // .then(res => {
-  //   return dispatch(getEventDetail(res.data))
-  // })
-  // .catch(err => console.log(err))
 
-export const editOrganizationDetail = organization => dispatch =>
-  axios.put('/api/organizations/' + organization.id, organization)
-  .then(res => {
-    dispatch(updateOrganizationDetail(res.data));
-    history.push('/organizations/' + organization.id);
-  })
+export const editOrganizationDetail = organization => dispatch => {
+  const ref = firebase.database().ref('/organizations').child(organization.id);
+  ref.update(organization);
+  history.push('/organizations/' + organization.id);
+}
 
 
 /**

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import history from '../history';
+import firebase from 'firebase';
 
 /**
  * ACTION TYPES
@@ -17,21 +18,17 @@ const updateEventDetail = event => ({type: UPDATE_EVENT_DETAIL, event});
  * THUNK CREATORS
  */
 export const fetchEventDetail = (eventId) => dispatch => {
-  const fakeEvent = { id: eventId, title: 'Event ' + eventId, description: 'blah blah' };
-  return dispatch(getEventDetail(fakeEvent));
+  const ref = firebase.database().ref('/events').child(eventId);
+  ref.on('value', snapshot =>
+    dispatch(getEventDetail(snapshot.val()))
+  );
 }
-  // axios.get('/api/events/' + eventId)
-  // .then(res => {
-  //   return dispatch(getEventDetail(res.data))
-  // })
-  // .catch(err => console.log(err))
 
-export const editEventDetail = event => dispatch =>
-  axios.put('/api/events/' + event.id, event)
-  .then(res => {
-    dispatch(updateEventDetail(res.data));
-    history.push('/events/' + event.id);
-  })
+export const editEventDetail = event => dispatch => {
+  const ref = firebase.database().ref('/events').child(event.id);
+  ref.update(event);
+  history.push('/events/' + event.id);
+}
 
 
 /**

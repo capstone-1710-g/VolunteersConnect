@@ -22,22 +22,27 @@ class Organizations extends Component {
         </Segment>}
         <h1>{displayName}</h1>
         {organizations.length > 0 && (
-          <Item.Group>
-            {organizations.map(organization => (
-              <Item key={organization.id} color="grey">
-                <Image src={organization.imageURL} href={'/organizations/' + organization.id} />
-                <Item.Content href={'/organizations/' + organization.id}>
-                <Item.Header>
-                    {organization.name}
-                </Item.Header>
-                <Item.Description as="h4">
-                    {organization.description}
-                </Item.Description>
-                </Item.Content>
-            </Item>
+          <Segment.Group horizontal>
+            <Segment style={{ width: '70%'}}>
+              <Item.Group divided>
+                {organizations.map(organization => (
+                  <Item className="org-list-item" key={organization.id} color="grey" href={'/organizations/' + organization.id}>
+                    <Item.Image size="small" src={organization.imageUrl} style={{margin: 'auto'}} />
 
-            ))}
-          </Item.Group>
+                    <Item.Content>
+                      <Item.Header>{organization.name}</Item.Header>
+                      <Item.Meta>Description</Item.Meta>
+                      <Item.Description>
+                        {organization.description}
+                      </Item.Description>
+                      <Item.Extra>Current Opportunities</Item.Extra>
+                    </Item.Content>
+                  </Item>
+                ))}
+              </Item.Group>
+            </Segment>
+            <Segment style={{ width: '30%' }} />
+          </Segment.Group>
         )}
       </div>
     );
@@ -47,7 +52,8 @@ class Organizations extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapAllOrganizationsState = ({ user, organizations }) => ({
-  user, organizations,
+  user,
+  organizations: Object.keys(organizations).map(id => ({ ...organizations[id], id })),
   displayName: 'All Organizations',
   isAdmin: user && user.role === 'admin',
 });

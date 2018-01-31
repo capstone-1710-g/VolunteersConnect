@@ -1,56 +1,74 @@
-import React, { Component } from 'react';
-import { Form, Button, TextArea, Icon } from 'semantic-ui-react';
+import React from 'react';
+import { Form, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { messageChanged, sendPostThunk } from '../store/text-post';
+import { sendPost } from '../store/post';
+import { Field, reduxForm, reset } from 'redux-form';
+import { InputField, TextAreaField } from 'react-semantic-redux-form';
+
+const adaptFileEventToValue = delegate =>
+  e => delegate(e.target.files[0])
+
+const FileInput = ({
+  input: {
+    value: omitValue,
+  onChange,
+  onBlur,
+  ...inputProps,
+  },
+  meta: omitMeta,
+  ...props,
+}) =>
+  (<input
+    onChange={adaptFileEventToValue(onChange)}
+    onBlur={adaptFileEventToValue(onBlur)}
+    type="file"
+    {...inputProps}
+    {...props}
+  />);
 
 
-class PostForm extends Component {
-
-    handlePost() {
-        this.props.sendPostThunk(this.props.textPost.post, this.props.event.id)
-    }
-
-    render() {
-        console.log('propingtonnnnsss', this.props)
-        return (
-            <Form reply>
-                <TextArea
-                    placeholder="Send a post!"
-                    onChange={(e, text) => this.props.messageChanged(text.value)}
-                />
-                <Button content='Send'
-                    labelPosition='right'
-                    icon='send'
-                    style={{ marginTop: 10, backgroundColor: '#53c66c', color: 'white' }}
-                    onClick={() => this.handlePost()}
-                />
-                <Button content='+ Photo/Video'
-                    labelPosition='right'
-                    icon='camera'
-                    style={{ marginTop: 10 }}
-                    primary
-                />
-            </Form>
-        )
-    }
+const PostForm = props => {
+  const { event, handleSubmit, handlePost, error } = props;
+  return (
+    <Form
+      reply style={{display: 'flex', flexDirection: 'column'}}
+    onSubmit={handleSubmit(values => handlePost(values, event.id))}>
+        <Field
+          name="content"
+          placeholder="Write something..."
+          component={TextAreaField}
+        />
+      <Field
+        component={FileInput}
+        name="file"
+      />
+        {/* <Input
+          name="file"
+          type="file"
+          accept="video/*"
+        /> */}
+        <Form.Button
+          content="Post"
+          labelPosition="right"
+          icon="send"
+          style={{ marginTop: 10 }}
+          primary
+          type="submit"
+        />
+    </Form>
+  )
 }
 
-const mapStateToProps = ({ textPost }) => {
-    return {
-        textPost
-    }
-}
+const mapStateToProps = ({ post }) => ({ post });
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         messageChanged: (data) => {
-//             dispatch(messageChanged(data))
-//         },
-//         sendPostThunk: (content) => {
-//             dispatch(sendPostThunk(content))
-//         }
-//     }
-// }
+const mapDispatchToProps = (dispatch) => ({
+  handlePost: (values, eventId) => {
+    const {file, content} = values;
+    dispatch(sendPost(content, file, eventId));
+    dispatch(reset('postForm'));
+  },
+});
 
-const PostFormContainer = connect(mapStateToProps, {messageChanged, sendPostThunk})(PostForm);
-export default PostFormContainer;
+export default reduxForm({
+  form: 'postForm',
+})(connect(mapStateToProps, mapDispatchToProps)(PostForm));
