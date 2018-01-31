@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import {fetchEventsByKeyword} from '../store/events';
+import {fetchEventsByKeyword, fetchEventsByLocation} from '../store/events';
 import history from '../history';
 
 /* -----------------    COMPONENT     ------------------ */
@@ -42,9 +42,9 @@ class SearchBar extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapDispatch = (dispatch) => ({
-  searchEvents: () => {
+  searchEvents: (zipcode) => {
     //console.log(zipcodes);
-    // dispatch(fetchEventsByKeyword(keyword));
+    dispatch(fetchEventsByLocation(zipcode, 5));
     // history.push('/events/search/' + keyword);
 
   }
