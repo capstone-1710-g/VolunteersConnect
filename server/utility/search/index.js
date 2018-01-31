@@ -1,16 +1,19 @@
 const path = require('path');
 const fs = require('fs');
-
+const rbush = require('rbush');
 const {codes} = require('./codes');
+const knn = require('rbush-knn');
+const kd = require('kdtree');
 
 const lookup = function(zip) {
-  console
+
   return codes[zip];
 };
 
-const degToRad = function(lat){
-  return lat * (Math.PI / 180);
+const degToRad = function(degrees){
+  return degrees * (Math.PI / 180);
 }
+
 const getDistance = function(zipA, zipB){
   zipA = lookup(zipA);
   zipB = lookup(zipB);
@@ -55,37 +58,109 @@ const haversine = function (lat1,lon1, lat2,lon2) {		// Retuns the great circle 
 	return 3960 * c;
 }
 
-const readdZipCodeFile = function(){
-  // let lines, result;
-  // let zipcodes = {}
+const getNearest = function(zipCodeInfo, radius){
 
-  // fs.readFile(__dirname + '/zipcodesRaw.txt','utf8',function read(err, data) {
-  //   if (err) {
-  //       throw err;
-  //   }
+  let mileInMeters = 1609.34;
 
-  //   let result, zip, latitude, longitude;
-  //   lines = data.split('\n');
-  //   lines.shift();
-  //   lines.forEach((line) => {
-  //     result = line.split('\t');
-  //     zip = result[0];
-  //     latitude = result[result.length - 2];
-  //     longitude = result[result.length - 1];
+  const tree = new kd.KDTree(3);
+  let coords, codeInfo;
 
-  //     if (zip && latitude && longitude) zipcodes[zip] = {latitude, longitude};
-  //   });
-  //   fs.writeFileSync(__dirname + "/codesJson.txt", JSON.stringify(zipcodes));
-  //  // console.log(JSON.stringify(zipcodes))
-  // });
+  for(let code in codes){
+    codeInfo = lookup(code);
+    coords = toECEF(codeInfo.latitude, codeInfo.longitude);
+    //console.log(coords)
+    tree.insert(coords.x, coords.y, coords.z, code);
+  }
+
+  let key, result;
+  for(let code in codes){
+    codeInfo = lookup(code);
+    coords = toECEF(codeInfo.latitude, codeInfo.longitude);
+    key = radius + 'miles';
+
+    result = tree.nearestRange(coords.x, coords.y, coords.z, radius * mileInMeters);
+
+    for(let i = 0; i < result.length; i++){
+      key = radius + 'miles';
+
+        if(zipCodeInfo[code]){
+          if(zipCodeInfo[code][key]) zipCodeInfo[code][key][result[i][3]] = true;
+          else {
+            zipCodeInfo[code][key] = {};
+            zipCodeInfo[code][key][result[i][3]] = true;
+          }
+        } else {
+          zipCodeInfo[code] = {};
+          zipCodeInfo[code][key] = {};
+          zipCodeInfo[code][key][result[i][3]] = true;
+        }
+
+    }
+
+  }
 
 }
-const getZipCodes = function() { return codes };
+
+const zipcodesInfoToJson = function(){
+
+  let results = {};
+  getNearest(results, 5);
+  getNearest(results, 10);
+  getNearest(results, 25);
+
+  let codesJson = JSON.stringify(results);
+  fs.writeFile( __dirname + '/codesJsoncomplete.JSON', codesJson, (err) => {
+    if (err) throw err;
+    console.log('The file has been saved!');
+  });
+
+};
+
+const toECEF = function(lat, lon) {
+
+  let cosLat = Math.cos(degToRad(lat));
+  let sinLat = Math.sin(degToRad(lat));
+  let cosLon = Math.cos(degToRad(lon));
+  let sinLon = Math.sin(degToRad(lon));
+  let R = 6378137.0 // earth radius
+
+  let f = 1.0 / 298.257224;
+  let C = 1.0 / Math.sqrt(cosLat * cosLat + (1 - f) * (1 - f) * sinLat * sinLat);
+  let S = (1.0 - f) * (1.0 - f) * C;
+  let h = 0.0;
+
+  let x = (R * C + h) * cosLat * cosLon;
+  let y = (R * C + h) * cosLat * sinLon;
+  let z = (R * S + h) * sinLat;
+
+  return {x, y, z};
+}
+
+
+const toCartesian = function(){
+
+  let item = {};
+  let caretesiancoords = [];
+  let codeLocation;
+
+  return Object.keys(codes).map((code) => {
+    codeLocation = lookup(code);
+    caretesiancoords = toECEF(codeLocation.latitude, codeLocation.longitude);
+
+    item = {
+      'minX': caretesiancoords[0],
+      'minY': caretesiancoords[1],
+      'maxX': caretesiancoords[0],
+      'maxY': caretesiancoords[1],
+      'zipCode': code
+    }
+    return item;
+  });
+
+
+};
+
 
 module.exports = {
-  lookup,
-  getDistance,
-  byRadius,
-  haversine,
-  getZipCodes
+  zipcodesInfoToJson
 }
