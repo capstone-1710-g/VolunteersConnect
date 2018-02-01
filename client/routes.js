@@ -7,7 +7,7 @@ import {Main, Login, Signup, UserHome,
   AllEvents, EventDetail, AddEventForm, EditEventForm,
   AllOrganizations, OrganizationDetail, AddOrganizationForm, EditOrganizationForm,
  } from './components'
-import {me} from './store'
+import { me } from './store/user'
 
 /**
  * COMPONENT
