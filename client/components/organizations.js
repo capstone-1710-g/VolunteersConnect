@@ -28,7 +28,7 @@ class Organizations extends Component {
             <Segment style={{ width: '70%'}}>
               <Item.Group divided>
                 {organizations.map(organization => (
-                  <Item className="org-list-item" key={organization.id} color="grey" href={'/organizations/' + organization.id}>
+                  <Item className="org-list-item" key={organization.id} color="grey" as={Link} to={'/organizations/' + organization.id}>
                     <Item.Image size="small" src={organization.imageUrl} style={{margin: 'auto'}} />
 
                     <Item.Content>
@@ -76,7 +76,6 @@ const mapAllOrganizationsDispatch = dispatch => ({
         photoURL: picture.large,
         uid: login.md5,
       }
-      console.log(newUser);
       dispatch(createUser(newUser));
     });
   }

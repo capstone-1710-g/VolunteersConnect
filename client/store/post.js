@@ -45,7 +45,7 @@ const storeFile = async (file) => {
   return url;
 }
 
-export const sendPost = (content, file, eventId) => {
+export const sendPost = (content, file, eventId, user) => {
   return async (dispatch) => {
     let url = null;
     if (file) {
@@ -58,6 +58,7 @@ export const sendPost = (content, file, eventId) => {
       content,
       url,
       type: file ? file.type : null,
+      user,
     };
 
     firebase.database().ref('/posts')

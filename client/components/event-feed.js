@@ -41,12 +41,20 @@ const renderVideo = (post) => (
 );
 
 function renderPost(post) {
+  if (!post.user) {
+    post.user = {
+      id: 'gduihs8fgsugbdfkzj',
+      displayName: 'Fake User',
+      email: 'fake@email.com',
+      profileImage: "https://picsum.photos/100/?random",
+    }
+  }
   return (
   <Card style={{ marginTop: 10, width: '100%' }} key={post.id}>
     <Card.Content>
-        <Image floated="left" size="mini" src="https://picsum.photos/100/?random" />
+        <Image floated="left" size="mini" src={post.user.profileImage} />
       <Card.Header floated="right">
-        Fake Username
+        {post.user.displayName}
       </Card.Header>
       <Card.Meta>
         {moment(new Date(post.createdAt)).fromNow()}

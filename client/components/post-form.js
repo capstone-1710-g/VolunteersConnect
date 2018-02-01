@@ -28,11 +28,11 @@ const FileInput = ({
 
 
 const PostForm = props => {
-  const { event, handleSubmit, handlePost, error } = props;
+  const { user, event, handleSubmit, handlePost, error } = props;
   return (
     <Form
       reply style={{display: 'flex', flexDirection: 'column'}}
-    onSubmit={handleSubmit(values => handlePost(values, event.id))}>
+    onSubmit={handleSubmit(values => handlePost(values, event.id, user))}>
         <Field
           name="content"
           placeholder="Write something..."
@@ -42,11 +42,6 @@ const PostForm = props => {
         component={FileInput}
         name="file"
       />
-        {/* <Input
-          name="file"
-          type="file"
-          accept="video/*"
-        /> */}
         <Form.Button
           content="Post"
           labelPosition="right"
@@ -59,12 +54,12 @@ const PostForm = props => {
   )
 }
 
-const mapStateToProps = ({ post }) => ({ post });
+const mapStateToProps = ({ post, user }) => ({ post, user });
 
 const mapDispatchToProps = (dispatch) => ({
-  handlePost: (values, eventId) => {
+  handlePost: (values, eventId, user) => {
     const {file, content} = values;
-    dispatch(sendPost(content, file, eventId));
+    dispatch(sendPost(content, file, eventId, user));
     dispatch(reset('postForm'));
   },
 });
