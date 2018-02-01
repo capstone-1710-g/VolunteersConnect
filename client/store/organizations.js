@@ -25,13 +25,16 @@ export const fetchOrganizations = () => dispatch => {
   })
 }
 
-export const addOrganization = organization => dispatch =>
-  axios.post('/api/organizations', organization)
-  .then(res => {
-    dispatch(addNewOrganization(res.data));
-    history.push('/organizations');
-  })
-  .catch(err => console.log(err));
+export const addOrganization = organization => dispatch => {
+  const ref = firebase.database().ref('/organizations/');
+  const key = ref.push().key;
+  ref.child(key).update({ ...organization, id: key });
+  ref.on('child_added', snapshot =>
+    dispatch(addNewOrganization(snapshot.val()))
+  );
+  history.push('/organizations');
+}
+
 
 /**
  * REDUCER

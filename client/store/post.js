@@ -39,8 +39,9 @@ export const fileSelected = file => {
 
 const storeFile = async (file) => {
   const storageRef = await firebase.storage().ref('media').child(file.name);
-  const snapshot = await storageRef.put(file);
-  const url = await storageRef.getDownloadURL();
+  const url = await storageRef.put(file).then(() => {
+    return storageRef.getDownloadURL();
+  });
   return url;
 }
 
