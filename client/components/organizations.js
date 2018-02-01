@@ -16,10 +16,10 @@ class Organizations extends Component {
     return (
       <div>
         {/* {this.user && this.user.isAdmin &&  */}
-        {isAdmin && <Segment>
+        <Segment>
           <Button as={Link} to="/organizations/add" floated="right">Add a new Organization</Button>
           <Divider horizontal>Admin Only</Divider>
-        </Segment>}
+        </Segment>
         <h1>{displayName}</h1>
         {organizations.length > 0 && (
           <Segment.Group horizontal>
