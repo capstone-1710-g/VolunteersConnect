@@ -97,11 +97,24 @@ const mapEditFormState = ({event}) => ({
   fields,
 });
 
+const googleAPIKey = 'AIzaSyBrq6c_EHlfSS9gkRC78w4Wk8tAz8bm4GM';
+const getLocation = async (address) => {
+  const encodedAddress = address.split(' ').join('+');
+  const res = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodedAddress + '&key=' + googleAPIKey);
+  const geocoded = await res.json();
+  const location = geocoded.results[0].geometry.location;
+  return location;
+}
+
 const mapAddFormDispatch = (dispatch) => ({
   load: () => ({}),
   handleEvent: (values) => {
-    const event = {...values};
-    dispatch(addEvent(event));
+    getLocation(values.address)
+    .then(location => {
+      console.log(location);
+      const newEvent = { ...values, location };
+      dispatch(addEvent(newEvent));
+    })
   },
 });
 
