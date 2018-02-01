@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import { Form, Button, Icon, Grid, Segment, Message, Header } from 'semantic-ui-react';
 import {auth} from '../store'
-import { facebookLogin } from '../store/auth';
+import { facebookLogin, facebookSignout } from '../store/auth';
 
 /**
  * COMPONENT
@@ -38,6 +38,7 @@ const AuthForm = (props) => {
           <Button color='facebook' onClick={() => facebookLogin()}>
             <Icon name='facebook' /> Facebook
           </Button>
+          <Button onClick={() => facebookSignout()}>Logout</Button>
           <Message>
             New to us? <a href='#'>Sign Up</a>
           </Message>
