@@ -28,7 +28,7 @@ class Events extends Component {
           <Segment raised>
             <Item.Group divided>
               {events.map(event => (
-                <Item key={event.id} color="grey" href={'/events/' + event.id}>
+                <Item key={event.id} color="grey" as={Link} to={'/events/' + event.id}>
                 <Item.Image size="small" src={event.imageUrl} />
                 <Item.Content>
                   <Item.Header>

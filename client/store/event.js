@@ -1,4 +1,3 @@
-import axios from 'axios';
 import history from '../history';
 import firebase from 'firebase';
 

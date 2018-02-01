@@ -21,7 +21,6 @@ const getUser = user => ({ type: GET_USER, user })
 
 //THUNKS
 
-
 export const me = () => dispatch => {
   dispatch(getUser(firebase.auth().currentUser || {}));
 }
