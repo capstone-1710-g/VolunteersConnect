@@ -26,7 +26,7 @@ export const me = () => dispatch => {
   dispatch(getUser(firebase.auth().currentUser || {}));
 }
 
-const createUser = (user) => dispatch => {
+export const createUser = (user) => dispatch => {
   let newUser = {
     id: user.uid,
     displayName: user.displayName,
@@ -35,7 +35,6 @@ const createUser = (user) => dispatch => {
   }
   firebase.database().ref('/users').child(user.uid)
     .set(newUser, () => {
-      console.log('newuserrrrr', newUser)
       dispatch(getUser(newUser))
     });
 }
