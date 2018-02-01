@@ -2,14 +2,14 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import { Form, Button, Icon, Grid, Segment, Message, Header } from 'semantic-ui-react';
-import {auth} from '../store'
-import { facebookLogin, facebookSignout } from '../store/auth';
+import {user} from '../store'
+import { googleLogout, onSignIn } from '../store/user';
 
 /**
  * COMPONENT
  */
 const AuthForm = (props) => {
-  const {name, displayName, handleSubmit, error} = props
+  const {name, isLoggedIn, displayName, onGoogleSignIn, error} = props
 
   return (
     <div className='login-form'>
@@ -35,10 +35,15 @@ const AuthForm = (props) => {
             {/* <Image src='/logo.png' /> */}
             {' '}Log-in to your account
           </Header>
-          <Button color='facebook' onClick={() => facebookLogin()}>
+          {/* <Button color='facebook' onClick={() => facebookLogin()}>
             <Icon name='facebook' /> Facebook
+          </Button> */}
+          {isLoggedIn && <Button onClick={() => googleLogout()}>Logout</Button>}
+          <Button color='google plus' onClick={() => onGoogleSignIn()}>
+            <Icon name='google plus' /> Google Plus
           </Button>
-          <Button onClick={() => facebookSignout()}>Logout</Button>
+          {/* <div onClick={() => onSignIn()} className="g-signin2" data-onsuccess="onSignIn">
+          </div> */}
           <Message>
             New to us? <a href='#'>Sign Up</a>
           </Message>
@@ -59,6 +64,7 @@ const mapLogin = (state) => {
   return {
     name: 'login',
     displayName: 'Login',
+    isLoggedIn: state.user.id,
     error: state.user.error
   }
 }
@@ -71,17 +77,11 @@ const mapSignup = (state) => {
   }
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-    handleSubmit (evt) {
-      evt.preventDefault()
-      const formName = evt.target.name
-      const email = evt.target.email.value
-      const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
-    }
+const mapDispatch = (dispatch) => ({
+  onGoogleSignIn: () => {
+    dispatch(onSignIn())
   }
-}
+})
 
 export const Login = connect(mapLogin, mapDispatch)(AuthForm)
 export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
@@ -92,6 +92,6 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+  // handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object
 }

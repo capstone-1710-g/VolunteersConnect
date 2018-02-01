@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
-import { logout } from '../store'
 import {SearchBar} from './index'
 import { Container, Menu, Image } from 'semantic-ui-react'
+import { logout } from '../store/user'
 
 /**
  * COMPONENT
