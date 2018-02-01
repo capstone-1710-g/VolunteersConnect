@@ -10,18 +10,16 @@ const FACEBOOK_LOGIN_FAIL = 'FACEBOOK_LOGIN_FAIL';
 
 //THUNKS
 
-export const facebookLogin = async () => {
-    try {
-        let result = await firebase.auth().signInWithPopup(provider);
+export const facebookLogin = () => {
+    firebase.auth().signInWithPopup(provider)
+    .then((result) => {
         console.log(result)
-        let token = result.credential.accessToken
-    } catch (error) {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        // The email of the user's account used.
-        let email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        let credential = error.credential;
-  // ...
-    }
+    })
+}
+
+export const facebookSignout = () => {
+    firebase.auth().signOut()
+    .then(() => {
+        console.log('Signout successful!')
+    })
 }

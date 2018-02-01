@@ -1,8 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const rbush = require('rbush');
 const {codes} = require('./codes');
-const knn = require('rbush-knn');
 const kd = require('kdtree');
 
 const lookup = function(zip) {
