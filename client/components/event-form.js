@@ -3,15 +3,36 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addEvent } from '../store/events';
 import { fetchEventDetail, editEventDetail } from '../store/event';
-import { Form, Segment } from 'semantic-ui-react';
+import { Form, Segment, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import { InputField, TextAreaField } from 'react-semantic-redux-form';
+
+function semanticFormField({ input, type, label, placeholder, meta: { touched, error, warning }, as: As = Input, ...props }) {
+  function handleChange(e, { value }) {
+    return input.onChange(value);
+  }
+  return (
+    <Form.Field>
+      <As {...props} {...input} value={input.value} type={type} label={label} placeholder={placeholder} onChange={handleChange} />
+      {touched && ((error && <span><i>{error}</i></span>) || (warning && <span><i>{warning}</i></span>))}
+    </Form.Field>
+  );
+}
 
 class EventForm extends Component {
 
   componentDidMount() {
-    this.props.load();
+    // this.props.load();
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   const { initialValues, initialize } = this.props;
+  //   if (!Object.keys(initialValues).length && nextProps.initialValues) {
+  //     initialize(nextProps.initialValues);
+  //     console.log('old: ', initialValues);
+  //     console.log('new:', nextProps.initialValues);
+  //   }
+  // }
 
   renderInputField({ name, label, placeholder }) {
     return (
@@ -33,18 +54,18 @@ class EventForm extends Component {
 
   render() {
     const { name, displayName, handleSubmit, handleEvent, fields, submitSucceeded, error } = this.props;
+
     return (
       <div>
         <h1>{displayName}</h1>
         <Segment>
-          <div>
             <Form name={name} onSubmit={handleSubmit(values => handleEvent(values))}>
               {fields.map(field => this.renderInputField(field))}
               <div>
                 <Form.Button disabled={submitSucceeded} >{displayName}</Form.Button>
               </div>
             </Form>
-          </div>
+            <Button onClick={this.props.load}>Load</Button>
         </Segment>
       </div>
     );
@@ -57,36 +78,52 @@ class EventForm extends Component {
 const fields = [
   { name: 'title', label: 'Title', placeholder: 'Title...' },
   { name: 'description', label: 'Description', placeholder: 'Description...' },
+  { name: 'address', label: 'Address', placeholder: 'Enter the address'},
+  { name: 'imageUrl', label: 'Image URL', placeholder: 'Enter Image URL'},
 ];
 
 const mapAddFormState = (state) => ({
-  name: 'add-event',
+  name: 'addEventForm',
   displayName: 'Add a New Event',
-  initialValues: {title: '', description: ''},
-  fields: fields,
+  fields,
   // error: state.user.error
 });
 
-const mapEditFormState = (state) => ({
-  name: 'edit-event',
+const mapEditFormState = ({event}) => ({
+  name: 'editEventForm',
   displayName: 'Update Event',
-  initialValues: state.event,
-  fields: fields,
+  initialValues: event,
+  enableReinitialize: true,
+  fields,
 });
+
+const googleAPIKey = 'AIzaSyBrq6c_EHlfSS9gkRC78w4Wk8tAz8bm4GM';
+const getLocation = async (address) => {
+  const encodedAddress = address.split(' ').join('+');
+  const res = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address=' + encodedAddress + '&key=' + googleAPIKey);
+  const geocoded = await res.json();
+  const location = geocoded.results[0].geometry.location;
+  return location;
+}
 
 const mapAddFormDispatch = (dispatch) => ({
   load: () => ({}),
   handleEvent: (values) => {
-    const {title, description} = values;
-    const event = {title, description};
-    dispatch(addEvent(event));
+    getLocation(values.address)
+    .then(location => {
+      console.log(location);
+      const newEvent = { ...values, location };
+      dispatch(addEvent(newEvent));
+    })
   },
 });
 
 const mapEditFormDispatch = (dispatch, ownProps) => ({
-  load: () => dispatch(fetchEventDetail(ownProps.match.params.id)),
+  load: () => {
+    dispatch(fetchEventDetail(ownProps.match.params.id));
+  },
   handleEvent: (values) => {
-    dispatch(editEventDetail(values));
+    dispatch(editEventDetail({ ...values, id: ownProps.match.params.id}));
   },
 });
 
@@ -98,7 +135,7 @@ export const AddEventForm =
   export const EditEventForm =
   reduxForm({
     form: 'editEventForm',
-    enableReinitialize: true // this is needed!!
+    // keepDirtyOnReinitialize: true,
   })(connect(mapEditFormState, mapEditFormDispatch)(EventForm));
 
 /**

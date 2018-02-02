@@ -1,63 +1,100 @@
-import axios from 'axios'
-import history from '../history'
+import firebase from 'firebase';
+require('babel-polyfill');
 
-/**
- * ACTION TYPES
- */
-const GET_USER = 'GET_USER'
-const REMOVE_USER = 'REMOVE_USER'
+// const provider = new firebase.auth.FacebookAuthProvider();
+var provider = new firebase.auth.GoogleAuthProvider();
 
-/**
- * INITIAL STATE
- */
+
+//ACTION TYPES
+const FACEBOOK_LOGIN_SUCCESS = 'FACEBOOK_LOGIN_SUCCESS';
+const FACEBOOK_LOGIN_FAIL = 'FACEBOOK_LOGIN_FAIL';
+const GET_USER = 'GET_USER';
+const REMOVE_USER = 'REMOVE_USER';
+
+
 const defaultUser = {}
 
-/**
- * ACTION CREATORS
- */
-const getUser = user => ({type: GET_USER, user})
-const removeUser = () => ({type: REMOVE_USER})
+//ACTION CREATORS
 
-/**
- * THUNK CREATORS
- */
-export const me = () =>
-  dispatch =>
-    axios.get('/auth/me')
-      .then(res =>
-        dispatch(getUser(res.data || defaultUser)))
-      .catch(err => console.log(err))
+const getUser = user => ({ type: GET_USER, user })
 
-export const auth = (email, password, method) =>
-  dispatch =>
-    axios.post(`/auth/${method}`, { email, password })
-      .then(res => {
-        dispatch(getUser(res.data))
-        history.push('/home')
-      }, authError => { // rare example: a good use case for parallel (non-catch) error handler
-        dispatch(getUser({error: authError}))
-      })
-      .catch(dispatchOrHistoryErr => console.error(dispatchOrHistoryErr))
 
-export const logout = () =>
-  dispatch =>
-    axios.post('/auth/logout')
-      .then(_ => {
-        dispatch(removeUser())
-        history.push('/login')
-      })
-      .catch(err => console.log(err))
+//THUNKS
 
-/**
- * REDUCER
- */
+export const me = () => dispatch => {
+  dispatch(getUser(firebase.auth().currentUser || {}));
+}
+
+export const createUser = (user) => dispatch => {
+  let newUser = {
+    id: user.uid,
+    displayName: user.displayName,
+    profileImage: user.photoURL,
+    email: user.email
+  }
+  firebase.database().ref('/users').child(user.uid)
+    .set(newUser, () => {
+      dispatch(getUser(newUser))
+    });
+}
+
+export const onSignIn = () => dispatch => {
+  firebase.auth().signInWithPopup(provider).then((result) => {
+    let user = result.user;
+    const query = firebase.database().ref('/users')
+      .orderByChild('id')
+      .equalTo(user.uid);
+    query.once('value', snapshot => {
+      if (snapshot.val()) {
+        const existingUser = snapshot.val()[user.uid];
+        dispatch(getUser(existingUser))
+      } else {
+        dispatch(createUser(user))
+      }
+    });
+  })
+    .catch((error) => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+
+      console.log(error.code)
+      console.log(error.message)
+    });
+}
+
+export const logout = () => dispatch => {
+  console.log(firebase.auth().currentUser)
+  firebase.auth().signOut()
+    .then(() => {
+      dispatch(me())
+    })
+}
+
 export default function (state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
       return action.user
-    case REMOVE_USER:
-      return defaultUser
     default:
       return state
   }
 }
+
+
+// export const facebookLogin = () => {
+//     firebase.auth().signInWithPopup(provider)
+//     .then((result) => {
+//         let facebookUser = result.user
+//         console.log('resulllllttttt', facebookUser)
+//     })
+// }
+
+// export const facebookLogout = () => {
+//     console.log(firebase.auth().currentUser)
+//     firebase.auth().signOut()
+//         .then(() => {
+//             localStorage.clear();
+//             console.log('Signout successful!')
+//             console.log(firebase.auth().currentUser)
+
+//         })
+// }

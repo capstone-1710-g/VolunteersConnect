@@ -45,7 +45,7 @@ class OrganizationForm extends Component {
 
   render() {
     const { name, displayName, handleSubmit, fields } = this.props;
-    return (this.state &&
+    return (
       <div>
         <h1>{displayName}</h1>
         <Segment>
@@ -69,13 +69,22 @@ class OrganizationForm extends Component {
 const fields = [
   { name: 'name', label: 'Organization Name' },
   { name: 'description', label: 'Description' },
+  { name: 'baseLocation', label: 'Base Location'},
+  { name: 'imageUrl', label: 'Image URL'},
+  { name: 'establishedDate', label: 'Established Date'},
 ];
 
 const mapAddFormState = (state) => ({
   name: 'add-organization',
   displayName: 'Add a New Organization',
-  initialValues: {name: '', description: ''},
-  event: { name: '', description: ''},
+  initialValues: {
+    name: '', description: '', baseLocation: '',
+    imageUrl: '', establishedDate: '',
+  },
+  event: {
+    name: '', description: '', baseLocation: '',
+    imageUrl: '', establishedDate: '',
+  },
   fields: fields,
   // error: state.user.error
 });
@@ -83,7 +92,10 @@ const mapAddFormState = (state) => ({
 const mapEditFormState = (state) => ({
   name: 'edit-organization',
   displayName: 'Update Organization',
-  initialValues: { name: '', description: ''},
+  initialValues: {
+    name: '', description: '', baseLocation: '',
+    imageUrl: '', establishedDate: '',
+  },
   event: state.event,
   fields: fields,
 });
@@ -100,12 +112,14 @@ const mapEditFormDispatch = (dispatch, ownProps) => ({
   load: () => dispatch(fetchOrganizationDetail(ownProps.match.params.id)),
   handleSubmit: (e, organization) => {
     e.preventDefault();
-    dispatch(editOrganizationDetail(organization));
+    dispatch(editOrganizationDetail({
+      ...organization, id: ownProps.match.params.id
+    }));
   },
 });
 
-export const AddEventForm = connect(mapAddFormState, mapAddFormDispatch)(OrganizationForm);
-export const EditEventForm = connect(mapEditFormState, mapEditFormDispatch)(OrganizationForm);
+export const AddOrganizationForm = connect(mapAddFormState, mapAddFormDispatch)(OrganizationForm);
+export const EditOrganizationForm = connect(mapEditFormState, mapEditFormDispatch)(OrganizationForm);
 
 /**
  * PROP TYPES

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchEventDetail } from '../store/event';
-import { Item, Header, Segment, Button, Divider, Image, Grid, Menu } from 'semantic-ui-react';
+import { fetchEventDetail, addVolunteerToEvent } from '../store/event';
+import { Item, Header, Segment, Button, Divider, Image, Grid, Tab } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
@@ -34,7 +34,23 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { event, isAdmin, isLoggedIn, posts } = this.props;
+    const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer } = this.props;
+    const panes = [
+      { menuItem: 'Volunteers', render: () => (
+        <Tab.Pane>
+          <Item.Group>
+          {
+            volunteers.map(volunteer =>
+            (<Item key={volunteer.id}>
+              <Item.Image size="tiny" src={volunteer.profileImage} />
+              <Item.Description as="h3">{volunteer.displayName}</Item.Description>
+            </Item>)
+          )}
+          </Item.Group>
+        </Tab.Pane>
+        )},
+      { menuItem: 'Event Coordinators', render: () => <Tab.Pane>Event Coordinators</Tab.Pane> },
+    ]
     return (
       <div>
         {event.id &&
@@ -53,7 +69,11 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column>
-                    <Button size="huge" fluid primary>Volunteer For This Event!</Button>
+                    <Button
+                    size="huge" fluid primary
+                    onClick={() => signUpForVolunteer(event, user)}
+                    >
+                    Volunteer For This Event!</Button>
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
@@ -66,10 +86,7 @@ class EventDetail extends Component {
                   <Item.Description as={Markdown}>{event.description}</Item.Description>
                 </Item.Content>
                 <Segment>
-                  <Menu tabular>
-                    <Menu.Item name="coordinator" active={this.state.activeItem === 'coordinator'} onClick={this.handleItemClick} />
-                    <Menu.Item name="volunteers" active={this.state.activeItem === 'volunteers'} onClick={this.handleItemClick} />
-                  </Menu>
+                  <Tab panes={panes} />
                 </Segment>
               </Item>
             </Segment>
@@ -86,10 +103,12 @@ class EventDetail extends Component {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapState = ({user, event, posts }) => ({
+  user,
   event,
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
   posts: Object.keys(posts).map(id => ({ ...posts[id], id })),
+  volunteers: event.volunteers ? Object.keys(event.volunteers).map(id => event.volunteers[id]) : [],
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
@@ -98,7 +117,10 @@ const mapDispatch = (dispatch, ownProps) => ({
   },
   getEventPosts: () => {
     return dispatch(getEventPosts(ownProps.match.params.id))
-  }
+  },
+  signUpForVolunteer: (event, user) =>
+  dispatch(addVolunteerToEvent(event, user))
+  ,
 });
 
 export default connect(mapState, mapDispatch)(EventDetail);

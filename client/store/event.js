@@ -1,4 +1,3 @@
-import axios from 'axios';
 import history from '../history';
 import firebase from 'firebase';
 
@@ -7,12 +6,14 @@ import firebase from 'firebase';
  */
 const GET_EVENT_DETAIL = 'GET_EVENT_DETAIL';
 const UPDATE_EVENT_DETAIL = 'UPDATE_EVENT_DETAIL';
+const VOLUNTEER_ADDED = 'VOLUNTEER_ADDED';
 
 /**
  * ACTION CREATORS
  */
 const getEventDetail = event => ({ type: GET_EVENT_DETAIL, event });
 const updateEventDetail = event => ({type: UPDATE_EVENT_DETAIL, event});
+const volunteerAdded = volunteer => ({type:VOLUNTEER_ADDED, volunteer});
 
 /**
  * THUNK CREATORS
@@ -30,6 +31,16 @@ export const editEventDetail = event => dispatch => {
   history.push('/events/' + event.id);
 }
 
+export const addVolunteerToEvent = (event, user) => dispatch => {
+  console.log('EVENTID', event.id);
+  console.log('user', user);
+  const ref = firebase.database().ref('/events').child(event.id)
+  .child('volunteers');
+  ref.push(user).on('value', snapshot => {
+    console.log('VOLUNTEER', snapshot.val());
+    dispatch(volunteerAdded(snapshot.val()))
+  });
+}
 
 /**
  * REDUCER
@@ -39,6 +50,13 @@ export default function (state = {}, action) {
     case GET_EVENT_DETAIL:
     case UPDATE_EVENT_DETAIL:
       return action.event;
+    case VOLUNTEER_ADDED:
+      // return Object.assign({}, state, {
+      //   volunteers: {
+      //     ...state.volunteers,
+      //     [action.volunteer.id]: action.volunteer
+      //   }
+      // });
     default:
       return state;
   }
