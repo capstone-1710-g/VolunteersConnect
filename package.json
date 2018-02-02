@@ -30,6 +30,7 @@
     "express-session": "^1.15.1",
     "firebase": "^4.9.0",
     "google-map-react": "^0.29.0",
+    "google-maps-react": "^1.1.2",
     "history": "^4.6.3",
     "kdtree": "^0.1.2",
     "moment": "^2.20.1",
