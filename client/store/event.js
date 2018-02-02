@@ -35,10 +35,10 @@ export const addVolunteerToEvent = (event, user) => dispatch => {
   console.log('EVENTID', event.id);
   console.log('user', user);
   const ref = firebase.database().ref('/events').child(event.id)
-  .child('volunteers');
-  ref.push(user).on('value', snapshot => {
-    console.log('VOLUNTEER', snapshot.val());
-    dispatch(volunteerAdded(snapshot.val()))
+  .child('volunteers')
+  .child(user.id);
+  ref.set(user, () => {
+    dispatch(volunteerAdded(user))
   });
 }
 
