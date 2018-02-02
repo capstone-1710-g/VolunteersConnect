@@ -34,7 +34,7 @@ class SearchBar extends Component {
           action={{ icon: 'search' }}
           onChange={this.handleChange}
           value={this.state.keyword}
-          placeholder="Search Events..." />
+          placeholder="Search Events by ZIP Code..." />
         </Form>
     </div>
     )

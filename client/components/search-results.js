@@ -19,7 +19,9 @@ class SearchResults extends Component{
     return (
       <SearchMap
       searchedEvents={this.props.searchedEvents}
+      zipcode={this.props.match.params.keyword}
       />
+
 
     )
 
