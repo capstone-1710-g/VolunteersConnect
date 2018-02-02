@@ -20,7 +20,7 @@ class OrganizationDetail extends Component {
       <div>
         <Segment>
           <Button as={Link} to={'/organizations/' + organization.id + '/edit'} floated="right">Edit this organization</Button>
-          <Divider horizontal>Admin Only</Divider>
+          <Divider horizontal>Staff Only</Divider>
         </Segment>
         <Segment>
           <Item>

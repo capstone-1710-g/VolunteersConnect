@@ -28,7 +28,7 @@ const FileInput = ({
 
 
 const PostForm = props => {
-  const { user, event, handleSubmit, handlePost, error } = props;
+  const { user, event, handleSubmit, handlePost, error, isLoggedIn } = props;
   return (
     <Form
       reply style={{display: 'flex', flexDirection: 'column'}}
@@ -43,6 +43,7 @@ const PostForm = props => {
         name="file"
       />
         <Form.Button
+          disabled={!isLoggedIn}
           content="Post"
           labelPosition="right"
           icon="send"
@@ -54,7 +55,10 @@ const PostForm = props => {
   )
 }
 
-const mapStateToProps = ({ post, user }) => ({ post, user });
+const mapStateToProps = ({ post, user }) => ({
+  post, user,
+  isLoggedIn: !!user.id,
+});
 
 const mapDispatchToProps = (dispatch) => ({
   handlePost: (values, eventId, user) => {

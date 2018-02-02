@@ -37,7 +37,7 @@ class EventDetail extends Component {
     const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer } = this.props;
     const panes = [
       { menuItem: 'Volunteers', render: () => (
-        <Tab.Pane>
+        <Tab.Pane key="1">
           <Item.Group>
           {
             volunteers.map(volunteer =>
@@ -49,14 +49,14 @@ class EventDetail extends Component {
           </Item.Group>
         </Tab.Pane>
         )},
-      { menuItem: 'Event Coordinators', render: () => <Tab.Pane>Event Coordinators</Tab.Pane> },
+      { menuItem: 'Event Coordinators', render: () => <Tab.Pane key="2">Event Coordinators</Tab.Pane> },
     ]
     return (
       <div>
         {event.id &&
         <Segment>
           <Button as={Link} to={'/events/' + event.id + '/edit'} floated="right">Edit this event</Button>
-          <Divider horizontal>Admin Only</Divider>
+          <Divider horizontal>Staff Only</Divider>
         </Segment>}
 
         {event.id && (
@@ -71,6 +71,7 @@ class EventDetail extends Component {
                   <Grid.Column>
                     <Button
                     size="huge" fluid primary
+                    disabled={!isLoggedIn}
                     onClick={() => signUpForVolunteer(event, user)}
                     >
                     Volunteer For This Event!</Button>
