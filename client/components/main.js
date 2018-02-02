@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import {SearchBar} from './index'
-import { Container, Menu, Image } from 'semantic-ui-react'
-import { logout } from '../store/user'
+import { Container, Menu, Image, Button } from 'semantic-ui-react'
+import { logout, createUser } from '../store/user'
 
 /**
  * COMPONENT
@@ -20,7 +20,6 @@ const Main = (props) => {
       <Menu fixed="top" size="large" borderless style={{ backgroundColor: '#dce2e8' }} stackable>
         <Container>
           <Menu.Item as={Link} to="/home" header>
-            {/* MYSO */}
             <Image style={{ height: '5.5em', width: 'auto' }} src="/logo.png"  />
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
@@ -38,6 +37,9 @@ const Main = (props) => {
               </div>
               : <div className="right menu">
                 {/* The navbar will show these links before you log in */}
+                <Menu.Item as={Button} onClick={props.generateRandomUser}>
+                  Log In As Random User
+                </Menu.Item>
                 <Menu.Item as={Link} to="/login">Login</Menu.Item>
                 <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
               </div>
@@ -62,13 +64,28 @@ const mapState = (state) => {
   }
 }
 
-const mapDispatch = (dispatch) => {
-  return {
-    handleClick() {
-      dispatch(logout())
-    }
+const mapDispatch = (dispatch) => ({
+  handleClick() {
+    dispatch(logout())
+  },
+  generateRandomUser: () => {
+    fetch('https://randomuser.me/api/')
+      .then(results => results.json())
+      .then(results => {
+        const [randomUser] = results.results;
+        const { name, email, picture, login } = randomUser;
+        const firstName = name.first[0].toUpperCase() + name.first.slice(1);
+        const lastName = name.last[0].toUpperCase() + name.last.slice(1);
+        const newUser = {
+          displayName: firstName + ' ' + lastName,
+          email,
+          photoURL: picture.large,
+          uid: login.md5,
+        }
+        dispatch(createUser(newUser));
+      });
   }
-}
+})
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes

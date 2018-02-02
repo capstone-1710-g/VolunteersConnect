@@ -21,7 +21,7 @@ class Events extends Component {
           events
           && <Segment>
           <Button as={Link} to="/events/add" floated="right">Add a new event</Button>
-          <Divider horizontal>Admin Only</Divider>
+          <Divider horizontal>Staff Only</Divider>
         </Segment>}
         <h1>{displayName}</h1>
         {events.length > 0 && (
