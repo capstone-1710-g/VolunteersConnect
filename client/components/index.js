@@ -5,6 +5,8 @@ export {AllEvents} from './events'
 export {default as EventDetail} from './event-detail'
 export {AddEventForm, EditEventForm} from './event-form'
 export {AllOrganizations} from './organizations'
+export {AllSearchResults} from './search-results'
 export {default as OrganizationDetail} from './organization-detail'
 export { AddOrganizationForm, EditOrganizationForm } from './organization-form'
-export {default as SearchBar} from './search-bar'
+export {default as SearchBar} from './search-bar';
+export {default as SearchMap} from './search-map';

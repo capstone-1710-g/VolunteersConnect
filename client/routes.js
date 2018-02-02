@@ -6,6 +6,7 @@ import history from './history'
 import {Main, Login, Signup, UserHome,
   AllEvents, EventDetail, AddEventForm, EditEventForm,
   AllOrganizations, OrganizationDetail, AddOrganizationForm, EditOrganizationForm,
+  AllSearchResults
  } from './components'
 import {me} from './store'
 
@@ -28,6 +29,7 @@ class Routes extends Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             {/* <Route exact path="/events/search/:keyword" component={EventsBySearch} /> */}
+            <Route exact path="/events/search/:keyword/:radius" component={AllSearchResults} />
             <Route exact path="/events/add" component={AddEventForm} />
             <Route exact path="/events/:id/edit" component={EditEventForm} />
             <Route exact path="/events/:id" component={EventDetail} />

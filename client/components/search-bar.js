@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import {fetchEventsByKeyword, fetchEventsByLocation} from '../store/events';
-import history from '../history';
+import {fetchEventsByKeyword, fetchEventsByLocation} from '../store';
+
 
 /* -----------------    COMPONENT     ------------------ */
 class SearchBar extends Component {
@@ -19,9 +19,11 @@ class SearchBar extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const keyword = this.state.keyword;
-    this.setState({ keyword: '' });
-    this.props.searchEvents(keyword);
+    if (this.state.keyword.length){
+      const keyword = this.state.keyword;
+      this.setState({ keyword: '' });
+      this.props.searchEvents(keyword);
+    }
   }
 
   render() {
@@ -41,14 +43,13 @@ class SearchBar extends Component {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapDispatch = (dispatch) => ({
-  searchEvents: (zipcode) => {
-    //console.log(zipcodes);
-    dispatch(fetchEventsByLocation(zipcode, 5));
-    // history.push('/events/search/' + keyword);
-
+const mapDispatch = (dispatch) => {
+  return {
+    searchEvents: (keyword) => {
+      dispatch(fetchEventsByLocation(keyword, 5));
+    }
   }
-});
+};
 
 export default connect(null, mapDispatch)(SearchBar);
 
