@@ -7,6 +7,7 @@ import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
 import PostForm from './post-form';
+import RequestFormModal from './request-form-modal'
 
 
 /* -----------------    COMPONENT     ------------------ */
@@ -69,12 +70,7 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column>
-                    <Button
-                    size="huge" fluid primary
-                    disabled={!isLoggedIn}
-                    onClick={() => signUpForVolunteer(event, user)}
-                    >
-                    Volunteer For This Event!</Button>
+                    <RequestFormModal event={event} />
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
@@ -118,10 +114,7 @@ const mapDispatch = (dispatch, ownProps) => ({
   },
   getEventPosts: () => {
     return dispatch(getEventPosts(ownProps.match.params.id))
-  },
-  signUpForVolunteer: (event, user) =>
-  dispatch(addVolunteerToEvent(event, user))
-  ,
+  }
 });
 
 export default connect(mapState, mapDispatch)(EventDetail);

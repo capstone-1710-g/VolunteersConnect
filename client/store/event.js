@@ -31,9 +31,8 @@ export const editEventDetail = event => dispatch => {
   history.push('/events/' + event.id);
 }
 
-export const addVolunteerToEvent = (event, user) => dispatch => {
-  console.log('EVENTID', event.id);
-  console.log('user', user);
+export const addVolunteerToEvent = (request) => dispatch => {
+  const { event, user } = request
   const ref = firebase.database().ref('/events').child(event.id)
   .child('volunteers')
   .child(user.id);
