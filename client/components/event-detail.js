@@ -75,15 +75,10 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column>
-                    {isLoggedIn &&
-                    <Button
-                      size="huge" fluid primary
-                      disabled={volunteers.some(volunteer => volunteer.id === user.id)}
-                      onClick={() => signUpForVolunteer(event, user)}
-                    >
-                    Volunteer For This Event!</Button>
-                    }
-                    <RequestFormModal event={event} />
+                    {/* {isLoggedIn && */}
+                    
+                      <RequestFormModal event={event} />
+                    {/* } */}
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
@@ -128,8 +123,8 @@ const mapDispatch = (dispatch, ownProps) => ({
   getEventPosts: () =>
     dispatch(getEventPosts(ownProps.match.params.id))
   ,
-  signUpForVolunteer: (event, user) =>
-    dispatch(addVolunteerToEvent(event, user))
+  signUpForVolunteer: (request) =>
+    dispatch(addVolunteerToEvent(request))
   ,
   initiateChat: (sender, recipient) => {
     const existingRecipients = Object.keys(sender.messageSessions).map(id =>
