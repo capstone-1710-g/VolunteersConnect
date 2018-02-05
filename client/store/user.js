@@ -44,7 +44,7 @@ export const onSignIn = () => dispatch => {
     const query = firebase.database().ref('/users')
       .orderByChild('id')
       .equalTo(user.uid);
-    query.once('value', snapshot => {
+    query.on('value', snapshot => {
       if (snapshot.val()) {
         const existingUser = snapshot.val()[user.uid];
         dispatch(getUser(existingUser))
