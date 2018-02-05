@@ -9,6 +9,7 @@ import { getEventPosts } from '../store/posts';
 import PostForm from './post-form';
 import { createMessageSession } from '../store';
 import history from '../history';
+import RequestFormModal from './request-form-modal'
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -82,6 +83,7 @@ class EventDetail extends Component {
                     >
                     Volunteer For This Event!</Button>
                     }
+                    <RequestFormModal event={event} />
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
