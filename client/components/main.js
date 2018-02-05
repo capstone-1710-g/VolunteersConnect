@@ -24,6 +24,9 @@ const Main = (props) => {
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
           <Menu.Item as={Link} to="/organizations">Organizations</Menu.Item>
+          { isLoggedIn &&
+          <Menu.Item as={Link} to="/messages">Messages</Menu.Item>
+          }
           <div className="right menu">
             <Menu.Item>
               <SearchBar />
@@ -33,6 +36,13 @@ const Main = (props) => {
             isLoggedIn
               ? <div className="right menu">
                 {/* The navbar will show these links after you log in */}
+                <Menu.Item>
+                  <Image
+                    size="mini" src={user.profileImage}
+                    style={{height: '35px', margin: '0 1em'}}
+                  />
+                  {user.displayName}
+                </Menu.Item>
                 <Menu.Item as="a" href="#" onClick={handleClick}>Logout</Menu.Item>
               </div>
               : <div className="right menu">

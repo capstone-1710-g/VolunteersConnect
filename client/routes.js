@@ -6,7 +6,8 @@ import history from './history'
 import {Main, Login, Signup, UserHome,
   AllEvents, EventDetail, AddEventForm, EditEventForm,
   AllOrganizations, OrganizationDetail, AddOrganizationForm, EditOrganizationForm,
-  AllSearchResults
+  AllSearchResults,
+  Messages,
  } from './components'
 import { me } from './store/user'
 
@@ -38,11 +39,13 @@ class Routes extends Component {
             <Route exact path="/organizations/:id/edit" component={EditOrganizationForm} />
             <Route exact path="/organizations/:id" component={OrganizationDetail} />
             <Route exact path="/organizations" component={AllOrganizations} />
+
             {
               isLoggedIn &&
                 <Switch>
                   {/* Routes placed here are only available after logging in */}
                   <Route path="/home" component={UserHome} />
+                  <Route path="/messages" component={Messages} />
                 </Switch>
             }
             {/* Displays our Login component as a fallback */}

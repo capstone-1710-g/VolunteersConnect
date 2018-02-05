@@ -7,7 +7,8 @@ import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
 import PostForm from './post-form';
-
+import { createMessageSession } from '../store';
+import history from '../history';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -34,16 +35,20 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer } = this.props;
+    const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer, initiateChat } = this.props;
     const panes = [
       { menuItem: 'Volunteers', render: () => (
         <Tab.Pane key="1">
           <Item.Group>
           {
             volunteers.map(volunteer =>
-            (<Item key={volunteer.id}>
+                (<Item key={volunteer.id}>
               <Item.Image size="tiny" src={volunteer.profileImage} />
-              <Item.Description as="h3">{volunteer.displayName}</Item.Description>
+              <Item.Description as="h3">{volunteer.displayName}
+              {isLoggedIn &&
+                <Button primary disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
+              }
+              </Item.Description>
             </Item>)
           )}
           </Item.Group>
@@ -69,12 +74,14 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column>
+                    {isLoggedIn &&
                     <Button
-                    size="huge" fluid primary
-                    disabled={!isLoggedIn}
-                    onClick={() => signUpForVolunteer(event, user)}
+                      size="huge" fluid primary
+                      disabled={volunteers.some(volunteer => volunteer.id === user.id)}
+                      onClick={() => signUpForVolunteer(event, user)}
                     >
                     Volunteer For This Event!</Button>
+                    }
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
@@ -113,15 +120,25 @@ const mapState = ({user, event, posts }) => ({
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
-  loadEventDetail: () => {
-    return dispatch(fetchEventDetail(ownProps.match.params.id));
-  },
-  getEventPosts: () => {
-    return dispatch(getEventPosts(ownProps.match.params.id))
-  },
-  signUpForVolunteer: (event, user) =>
-  dispatch(addVolunteerToEvent(event, user))
+  loadEventDetail: () =>
+    dispatch(fetchEventDetail(ownProps.match.params.id))
   ,
+  getEventPosts: () =>
+    dispatch(getEventPosts(ownProps.match.params.id))
+  ,
+  signUpForVolunteer: (event, user) =>
+    dispatch(addVolunteerToEvent(event, user))
+  ,
+  initiateChat: (sender, recipient) => {
+    const existingRecipients = Object.keys(sender.messageSessions).map(id =>
+      sender.messageSessions[id]
+    );
+    if (existingRecipients.includes(recipient.id)) {
+      history.push('/messages');
+    } else {
+      return dispatch(createMessageSession(sender, recipient));
+    }
+  },
 });
 
 export default connect(mapState, mapDispatch)(EventDetail);
