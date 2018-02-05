@@ -1,22 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
-// import { Map, Marker, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
-// import GoogleMap from 'google-map-react';
+
 import { Item, Segment, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import history from '../history'
-
-//import Marker from './map-marker';
-
-// const events = [
-//   {
-//    title:"Sample Event 3",
-//    lat: '40.555431',
-//    lng: '-74.154564'
-//   }
-// ];
+import MapMarker from './map-marker';
 
 export default class SearchMap extends Component{
+
+
    constructor(props){
      super(props);
      this.state = {
@@ -25,46 +16,35 @@ export default class SearchMap extends Component{
        selectedEvent: {},
        showInfo: false
      }
-    //  this.onMarkerClick = this.onMarkerClick.bind(this);
-    //  this.onMapClicked = this.onMapClicked.bind(this);
+
    }
 
-  // shouldComponentUpdate (nextProps) {
-  //   console.log('nexttt propsssss', nextProps);
-  //   return nextProps.zipcode !== this.props.zipcode
-  //  }
 
-  
-
-  //  onMapClicked() {
-  //   if (this.state.showingInfoWindow) {
-  //     this.setState({
-  //       showingInfoWindow: false,
-  //       activeMarker: null
-  //     })
-  //   }
-  // }
-
-  // setCenterAndZoom () {
-  //   const bounds = new window.google.maps.LatLngBounds()
-  // }
-
-  onMarkerClick(id) {
-
-    history.push('/events/' + id)
-  }
 
   render(){
     const {searchedEvents, google } = this.props;
     console.log('propspsssss', this.props)
     const mapCenter = searchedEvents.length ? searchedEvents[0].location : {};
 
+    const markers = searchedEvents.map((event) => {
+      return (
+
+          <MapMarker
+            key={event.id}
+            lat={event.location.lat}
+            lng={event.location.lng}
+            event={event}
+          />
+        )
+      })
+
     return (
-     
-        <Segment.Group horizontal>
+
+       searchedEvents.length > 0 &&
+       <Segment.Group horizontal>
           <Segment >
-          <div style={{ width: 500, height: 500 }}>
             <GoogleMap
+              style={{ width: 500, height: 500 }}
               bootstrapURLKeys={{
                 key: "AIzaSyB3Aatep0EJEfPULjK9ok32wLnJcapWx84"
               }}
@@ -73,22 +53,13 @@ export default class SearchMap extends Component{
                 lng: -73.985130
               }}
               defaultZoom={12}
-              center={mapCenter}      
+              center={mapCenter}
             >
 
               {
-                searchedEvents.map((event) => {
-                return (
-                  
-                  <i onClick={() => { this.onMarkerClick(event.id) }} className="fa fa-map-marker" lat={event.location.lat}
-                    lng={event.location.lng} style={{ width: 40, height: 40, left: -20, top: -20, position: 'absolute', fontSize: '30px', color: 'red' }}
-                  >
-                  </i>
-                  )
-                })
+                markers
               }
             </GoogleMap>
-          </div>
           </Segment>
 
           <Segment raised style={{width: "50%"}}>
@@ -109,7 +80,7 @@ export default class SearchMap extends Component{
             </Item.Group>
           </Segment>
         </Segment.Group>
-     
+
 
       // searchedEvents.length && <Map
       //           onClick={this.onMapClicked}
@@ -139,11 +110,11 @@ export default class SearchMap extends Component{
       //     marker={this.state.activeMarker}
       //     visible={this.state.showingInfoWindow}>
             // <Item>
-            //   <Item.Header 
+            //   <Item.Header
             //   as={Link} to={`/events/${this.state.selectedEvent.id}`}
             //   >{this.state.selectedEvent.title}</Item.Header>
             // </Item>
-          
+
       //   </InfoWindow>
 
       // </Map>
@@ -162,9 +133,3 @@ const style = {
   width: '70%',
   height: '80%'
 }
-// export default GoogleApiWrapper({
-//   apiKey: ("AIzaSyB3Aatep0EJEfPULjK9ok32wLnJcapWx84")
-// })(SearchMap)
-
-
-
