@@ -45,11 +45,11 @@ class EventDetail extends Component {
             volunteers.map(volunteer =>
                 (<Item key={volunteer.id}>
               <Item.Image size="tiny" src={volunteer.profileImage} />
-              <Item.Description as="h3">{volunteer.displayName}
+              <Item.Header as="h3">{volunteer.displayName}
               {isLoggedIn &&
                 <Button primary disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
               }
-              </Item.Description>
+              </Item.Header>
             </Item>)
           )}
           </Item.Group>
@@ -75,10 +75,10 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column>
-                    {/* {isLoggedIn && */}
-                    
-                      <RequestFormModal event={event} />
-                    {/* } */}
+                    {isLoggedIn ?
+                      <RequestFormModal event={event} /> :
+                      <Button as={Link} to={'/signup'}>Sign Up To Volunteer</Button>
+                    }
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
                 </Grid>
@@ -127,7 +127,7 @@ const mapDispatch = (dispatch, ownProps) => ({
     dispatch(addVolunteerToEvent(request))
   ,
   initiateChat: (sender, recipient) => {
-    const existingRecipients = Object.keys(sender.messageSessions).map(id =>
+    const existingRecipients = Object.keys(sender.messageSessions || {}).map(id =>
       sender.messageSessions[id]
     );
     if (existingRecipients.includes(recipient.id)) {
