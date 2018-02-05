@@ -22,17 +22,8 @@ function semanticFormField({ input, type, label, placeholder, meta: { touched, e
 class EventForm extends Component {
 
   componentDidMount() {
-    // this.props.load();
+    this.props.load();
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { initialValues, initialize } = this.props;
-  //   if (!Object.keys(initialValues).length && nextProps.initialValues) {
-  //     initialize(nextProps.initialValues);
-  //     console.log('old: ', initialValues);
-  //     console.log('new:', nextProps.initialValues);
-  //   }
-  // }
 
   renderInputField({ name, label, placeholder }) {
     return (
@@ -135,7 +126,6 @@ export const AddEventForm =
   export const EditEventForm =
   reduxForm({
     form: 'editEventForm',
-    // keepDirtyOnReinitialize: true,
   })(connect(mapEditFormState, mapEditFormDispatch)(EventForm));
 
 /**

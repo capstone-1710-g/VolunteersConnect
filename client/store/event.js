@@ -50,12 +50,6 @@ export default function (state = {}, action) {
     case UPDATE_EVENT_DETAIL:
       return action.event;
     case VOLUNTEER_ADDED:
-      // return Object.assign({}, state, {
-      //   volunteers: {
-      //     ...state.volunteers,
-      //     [action.volunteer.id]: action.volunteer
-      //   }
-      // });
     default:
       return state;
   }

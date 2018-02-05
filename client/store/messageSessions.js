@@ -5,6 +5,7 @@ import firebase from 'firebase';
 
 const GET_MESSAGE_SESSIONS_BY_USER = 'GET_MESSAGE_SESSIONS_BY_USER';
 const CREATE_NEW_MESSAGE_SESSION = 'CREATE_NEW_MESSAGE_SESSION';
+const CREATE_NEW_MESSAGE = 'CREATE_NEW_MESSAGE';
 
 //ACTION CREATORS
 
@@ -15,6 +16,11 @@ export const getMessageSessionsByUser = messageSessions => ({
 
 export const createNewMessageSession = messageSession => ({
   type: CREATE_NEW_MESSAGE_SESSION,
+  messageSession
+})
+
+export const createNewMessage = messageSession => ({
+  type: CREATE_NEW_MESSAGE,
   messageSession
 })
 
@@ -44,7 +50,8 @@ export const createMessageSession = (sender, recipient) => dispatch => {
         displayName: sender.displayName,
         profileImage: sender.profileImage,
       },
-      { id: sender.id,
+      {
+        id: recipient.id,
         displayName: recipient.displayName,
         profileImage: recipient.profileImage,
       },
@@ -59,21 +66,16 @@ export const createMessageSession = (sender, recipient) => dispatch => {
   updates['/messageSessions/' +  sessionId] = messageSession;
   firebase.database().ref().update(updates)
   .then(() => {
+    dispatch(createNewMessageSession(messageSession));
     history.push('/messages/');
-    return dispatch(createNewMessageSession(messageSession));
   });
 };
 
 export const sendMessage = (message, messageSessionId) => dispatch => {
-  const ref = firebase.database().ref('/messageSessions')
-  .child(messageSessionId)
-  .child('/messages');
-  ref.push({
-    ...message,
-    timestamp: new Date().getTime(),
-  });
-  ref.on('child_added', snapshot => {
-    // dispatch(sendMessage(snapshot.val()))
+  const ref = firebase.database().ref('/messageSessions').child(messageSessionId);
+  ref.child('/messages').push(message);
+  ref.on('value', snapshot => {
+    dispatch(createNewMessage(snapshot.val()))
   });
 };
 
@@ -84,7 +86,10 @@ export default function (state = [], action) {
     case GET_MESSAGE_SESSIONS_BY_USER:
       return action.messageSessions;
     case CREATE_NEW_MESSAGE_SESSION:
-      // return [...state, action.messageSession];
+      return [...state, action.messageSession];
+    case CREATE_NEW_MESSAGE:
+      const rest = state.filter(session => session.id !== action.messageSession.id);
+      return [...rest, action.messageSession];
     default:
       return state;
   }
