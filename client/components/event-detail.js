@@ -10,18 +10,33 @@ import PostForm from './post-form';
 import { createMessageSession } from '../store';
 import history from '../history';
 import RequestFormModal from './request-form-modal'
+import Lightbox from 'react-image-lightbox';
 
 /* -----------------    COMPONENT     ------------------ */
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)'
+  }
+};
 
 class EventDetail extends Component {
 
   constructor(props) {
     super(props);
       this.state = {
-        activeItem: 'coordinator'
+        activeItem: 'coordinator',
+        isOpen: false,
+        photoIndex: 0
       }
 
       this.handleItemClick = this.handleItemClick.bind(this);
+
     }
 
   componentDidMount() {
@@ -37,6 +52,10 @@ class EventDetail extends Component {
 
   render() {
     const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer, initiateChat } = this.props;
+    const filteredPosts = posts.filter(post => {
+      return post.type && post.type.includes('image') || post.type && post.type.includes('video')
+    })
+    const { photoIndex, isOpen } = this.state
     const panes = [
       { menuItem: 'Volunteers', render: () => (
         <Tab.Pane key="1">
@@ -74,7 +93,7 @@ class EventDetail extends Component {
                   <Grid.Column>
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column textAlign="center">
                     {isLoggedIn ?
                       <RequestFormModal event={event} /> :
                       <Button as={Link} to={'/signup'}>Sign Up To Volunteer</Button>
@@ -99,6 +118,30 @@ class EventDetail extends Component {
               <EventFeed posts={posts} />
               <PostForm event={event} />
             </Segment>
+            <div>
+              <button type="button" onClick={() => this.setState({ isOpen: true })}>
+                View Memory
+              </button>
+              {
+                isOpen &&
+                <Lightbox
+                  mainSrc={filteredPosts[photoIndex].url}
+                  nextSrc={filteredPosts[(photoIndex + 1) % filteredPosts.length]}
+                  prevSrc={filteredPosts[(photoIndex + filteredPosts.length - 1) % filteredPosts.length]}
+                  onCloseRequest={() => this.setState({ isOpen: false })}
+                  onMovePrevRequest={() =>
+                    this.setState({
+                      photoIndex: (photoIndex + filteredPosts.length - 1) % filteredPosts.length,
+                    })
+                  }
+                  onMoveNextRequest={() =>
+                    this.setState({
+                      photoIndex: (photoIndex + 1) % filteredPosts.length,
+                    })
+                  }
+                />
+              }
+            </div>
           </Segment.Group>
         )}
       </div>)
