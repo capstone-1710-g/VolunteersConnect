@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addEvent } from '../store/events';
 import { fetchEventDetail, editEventDetail } from '../store/event';
+import { fetchOrganizationDetail } from '../store/organization';
 import { Form, Segment, Button } from 'semantic-ui-react';
 import { Field, reduxForm } from 'redux-form';
 import { InputField, TextAreaField } from 'react-semantic-redux-form';
@@ -44,19 +45,18 @@ class EventForm extends Component {
   }
 
   render() {
-    const { name, displayName, handleSubmit, handleEvent, fields, submitSucceeded, error } = this.props;
+    const { name, displayName, handleSubmit, handleEvent, fields, submitSucceeded, error, organization } = this.props;
 
     return (
       <div>
         <h1>{displayName}</h1>
         <Segment>
-            <Form name={name} onSubmit={handleSubmit(values => handleEvent(values))}>
+            <Form name={name} onSubmit={handleSubmit(values => handleEvent(values, organization))}>
               {fields.map(field => this.renderInputField(field))}
               <div>
                 <Form.Button disabled={submitSucceeded} >{displayName}</Form.Button>
               </div>
             </Form>
-            <Button onClick={this.props.load}>Load</Button>
         </Segment>
       </div>
     );
@@ -69,14 +69,17 @@ class EventForm extends Component {
 const fields = [
   { name: 'title', label: 'Title', placeholder: 'Title...' },
   { name: 'description', label: 'Description', placeholder: 'Description...' },
+  { name: 'date', label: 'Date', placeholder: 'Enter the date...'},
+  { name: 'time', label: 'Time', placeholder: 'Enter the time...'},
   { name: 'address', label: 'Address', placeholder: 'Enter the address'},
   { name: 'imageUrl', label: 'Image URL', placeholder: 'Enter Image URL'},
 ];
 
-const mapAddFormState = (state) => ({
+const mapAddFormState = ({organization}) => ({
   name: 'addEventForm',
   displayName: 'Add a New Event',
   fields,
+  organization,
   // error: state.user.error
 });
 
@@ -97,13 +100,22 @@ const getLocation = async (address) => {
   return location;
 }
 
-const mapAddFormDispatch = (dispatch) => ({
-  load: () => ({}),
-  handleEvent: (values) => {
+const mapAddFormDispatch = (dispatch, ownProps) => ({
+  load: () => {
+    dispatch(fetchOrganizationDetail(ownProps.match.params.organizationId));
+  },
+  handleEvent: (values, organization) => {
+    // take out user's messageSessions and add the rest of info as coordinator object
+    const {coordinator} = organization;
+
     getLocation(values.address)
     .then(location => {
-      console.log(location);
-      const newEvent = { ...values, location };
+      const newEvent = {
+        ...values,
+        location,
+        orgId: ownProps.match.params.organizationId,
+        coordinator,
+      };
       dispatch(addEvent(newEvent));
     })
   },
