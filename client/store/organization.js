@@ -24,12 +24,11 @@ export const fetchOrganizationDetail = (organizationId) => dispatch => {
 }
 
 export const editOrganizationDetail = organization => dispatch => {
-  console.log('ORGANIZATION', organization)
+
   const ref = firebase.database().ref('/organizations').child(organization.id);
   ref.update(organization);
   history.push('/organizations/' + organization.id);
 }
-
 
 /**
  * REDUCER
