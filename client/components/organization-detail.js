@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchOrganizationDetail } from '../store/organization';
-import { Item, Header, Segment, Button, Divider, Grid } from 'semantic-ui-react';
+import { fetchOrganizationDetail} from '../store/organization';
+import { fetchOrganizationEvents } from '../store';
+import { Item, Header, Segment, Button, Divider, Grid, Tab, Card, Image, Icon } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 
 
@@ -12,10 +13,45 @@ class OrganizationDetail extends Component {
 
   componentDidMount() {
     this.props.loadOrganizationDetail();
+    this.props.loadOrganizationEvents();
   }
 
   render() {
-    const { organization, isAdmin, isLoggedIn } = this.props;
+    const { organization, isAdmin, isLoggedIn, events } = this.props;
+    console.log(events)
+    const panes = [
+      {
+        menuItem: {key: 'events', content: 'Events'},
+        render: () =>
+          <Tab.Pane >
+              <Card.Group itemsPerRow={4}>
+              {events.map((event) => {
+                return(
+                  <Card as={Link} to={`/events/${event.id}`}>
+                      <Image src={event.imageUrl}/>
+                      <Card.Content>
+                        <Card.Header>{event.title}</Card.Header>
+                        <br />
+                        <Card.Meta>
+                          <div>
+                            <Icon name='calendar outline' size= 'large'/>
+                            {` ${event.date}`}
+                            <br />
+                            <br />
+                            <Icon name='marker' size= 'large' />
+                            {` ${event.address}`}
+                          </div>
+                        </Card.Meta>
+                   </Card.Content>
+                  </Card>
+                )
+              })}
+
+            </Card.Group>
+          </Tab.Pane>
+
+      }
+    ]
     return (
       <div>
         <Segment>
@@ -41,22 +77,30 @@ class OrganizationDetail extends Component {
             </Item.Content>
           </Item>
         </Segment>
-      </div>)
+        <Tab panes={panes} />
+
+
+      </div>
+      )
   }
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapState = ({ user, organization }, ownProps) => ({
+const mapState = ({ user, organization, events }, ownProps) => ({
   organization: {...organization, id: ownProps.match.params.id},
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
+  events
 });
 
 const mapDispatch = (dispatch, ownProps) => ({
   loadOrganizationDetail: () => {
     return dispatch(fetchOrganizationDetail(ownProps.match.params.id));
   },
+  loadOrganizationEvents: () => {
+    return dispatch(fetchOrganizationEvents(ownProps.match.params.id));
+  }
 });
 
 export default connect(mapState, mapDispatch)(OrganizationDetail);

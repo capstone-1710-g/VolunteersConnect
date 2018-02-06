@@ -6,12 +6,16 @@ import firebase from 'firebase';
  */
 const GET_EVENTS = 'GET_EVENTS';
 const ADD_NEW_EVENT = 'ADD_NEW_EVENT';
-
+const GET_ORGANIZATION_EVENTS =
+'GET_ORGANIZATION_EVENTS';
 /**
  * ACTION CREATORS
  */
 const getEvents = events => ({ type: GET_EVENTS, events });
 
+const getEventsByOrganization = events => ({
+  type: GET_ORGANIZATION_EVENTS, events
+});
 
 
 const addNewEvent = event => ({type: ADD_NEW_EVENT, event})
@@ -38,15 +42,32 @@ export const addEvent = event => dispatch => {
 }
 
 
+export const fetchOrganizationEvents = function (orgId) {
+
+  return function(dispatch) {
+    const eventsRef = firebase.database().ref('/events').orderByChild('orgId').equalTo(orgId);
+   // dispatch(getEventsByOrganization(snapshot.val()))
+    eventsRef.on('value', (snapshot) => {
+      let events = snapshot.val();
+      events = Object.keys(events).map((eventId) => {
+        return events[eventId];
+      })
+      dispatch(getEventsByOrganization(events));
+    })
+  }
+}
 /**
  * REDUCER
  */
 export default function(state = [], action) {
   switch (action.type) {
     case GET_EVENTS:
+    case GET_ORGANIZATION_EVENTS:
       return action.events;
+
     case ADD_NEW_EVENT:
       return state;
+
     default:
       return state;
   }
