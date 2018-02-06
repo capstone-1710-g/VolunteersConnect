@@ -2,8 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {SearchMap} from '../components';
 import {fetchEventsByLocation} from '../store';
+import { Item, Segment, Image, Icon, Button, Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class SearchResults extends Component{
+  constructor(props){
+    super(props);
+    this.onSearchTermChange = this.onSearchTermChange.bind(this);
+    this.state = {
+      searchTerm: ''
+    }
+  }
 
   componentDidMount(){
 
@@ -15,26 +24,65 @@ class SearchResults extends Component{
     }
 
   }
-  render(){
-    return (
-      <SearchMap
-      searchedEvents={this.props.searchedEvents}
-      zipcode={this.props.match.params.keyword}
-      />
 
+  onSearchTermChange(e){
+    this.setState({searchTerm: e.target.value});
+  }
+
+  render(){
+
+    const filteredEvents = this.props.searchedEvents.filter((e) => {
+      return e.title.includes(this.state.searchTerm);
+    });
+    return (
+
+      <div>
+          <Menu horizontal style={{maxHeight: 400, overflow: 'auto'}}>
+              <Menu.Item>
+              <Input placeholder='Search...' onChange={this.onSearchTermChange} />
+              </Menu.Item>
+          </Menu>
+
+          <Segment.Group horizontal>
+              <SearchMap
+              searchedEvents={filteredEvents}
+              zipcode={this.props.match.params.keyword}
+              />
+
+
+            <Segment raised style={{width: "30%", maxHeight: 600, overflow: 'auto'}}>
+                <Item.Group divided>
+                  {filteredEvents.map(event => (
+                    <Item key={event.id} color="grey" as={Link} to={'/events/' + event.id}>
+                      <Item.Image size="small" src={event.imageUrl} />
+                      <Item.Content>
+                        <Item.Header>
+                          {event.title}
+                        </Item.Header>
+                        <Item.Description>
+                          {event.description}
+                        </Item.Description>
+                      </Item.Content>
+                    </Item>
+                  ))}
+                </Item.Group>
+          </Segment>
+
+      </Segment.Group>
+    </div>
 
     )
 
   }
 
-
 }
 
+const mapAllSearchResultsState = ({searchedEvents}) => {
+  return {
+    searchedEvents
+  }
 
-const mapAllSearchResultsState = ({searchedEvents}) => ({
-  searchedEvents
-
-})
+}
 
 const mapAllSearchResultsDispatch = (dispatch) => ({
 

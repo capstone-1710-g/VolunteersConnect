@@ -7,7 +7,7 @@ import {Main, Login, Signup, UserHome,
   AllEvents, EventDetail, AddEventForm, EditEventForm,
   AllOrganizations, OrganizationDetail, AddOrganizationForm, EditOrganizationForm,
   AllSearchResults,
-  Messages,
+  Messages, UserPage
  } from './components'
 import { me } from './store/user'
 
@@ -46,6 +46,7 @@ class Routes extends Component {
                   {/* Routes placed here are only available after logging in */}
                   <Route path="/home" component={UserHome} />
                   <Route path="/messages" component={Messages} />
+                  <Route exact path="/:displayName" component={UserPage} />
                 </Switch>
             }
             {/* Displays our Login component as a fallback */}

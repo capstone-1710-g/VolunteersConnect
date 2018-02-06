@@ -11,4 +11,5 @@ export { AddOrganizationForm, EditOrganizationForm } from './organization-form'
 export {default as SearchBar} from './search-bar';
 export {default as SearchMap} from './search-map';
 export {default as Messages} from './messages';
-export {default as MapMarker} from './map-marker'
+export {default as MapMarker} from './map-marker';
+export {default as UserPage} from './user-page';

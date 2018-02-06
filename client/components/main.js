@@ -41,7 +41,7 @@ const Main = (props) => {
                     size="mini" src={user.profileImage}
                     style={{height: '35px', margin: '0 1em'}}
                   />
-                  {user.displayName}
+                  <Link to= {`/${user.displayName}`}> {user.displayName}</Link>
                 </Menu.Item>
                 <Menu.Item as="a" href="#" onClick={handleClick}>Logout</Menu.Item>
               </div>
