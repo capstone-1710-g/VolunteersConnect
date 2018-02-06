@@ -52,7 +52,7 @@ class Events extends Component {
 
 const mapAllEventsState = ({ user, events }) => ({
   user,
-  events: Object.keys(events).map(id => ({...events[id], id})),
+  events,
   displayName: 'All Events',
   isAdmin: user && user.role === 'admin',
 });

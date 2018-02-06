@@ -26,7 +26,11 @@ const addNewEvent = event => ({type: ADD_NEW_EVENT, event})
 export const fetchEvents = () => dispatch => {
   firebase.database().ref('/events')
   .on('value', snapshot => {
-    dispatch(getEvents(snapshot.val()));
+    let allEvents = snapshot.val() || {};
+    allEvents = Object.keys(allEvents).map((eventId) => {
+      return allEvents[eventId];
+    });
+    dispatch(getEvents(allEvents));
   })
 }
 
@@ -48,7 +52,7 @@ export const fetchOrganizationEvents = function (orgId) {
     const eventsRef = firebase.database().ref('/events').orderByChild('orgId').equalTo(orgId);
    // dispatch(getEventsByOrganization(snapshot.val()))
     eventsRef.on('value', (snapshot) => {
-      let events = snapshot.val();
+      let events = snapshot.val() || {};
       events = Object.keys(events).map((eventId) => {
         return events[eventId];
       })
