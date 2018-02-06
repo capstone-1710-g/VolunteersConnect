@@ -18,17 +18,16 @@ class OrganizationDetail extends Component {
 
   render() {
     const { organization, isAdmin, isLoggedIn, events } = this.props;
-    console.log(events)
     const panes = [
       {
         menuItem: {key: 'events', content: 'Events'},
         render: () =>
           <Tab.Pane >
-              <Card.Group itemsPerRow={4}>
+             {events.length > 0 && <Card.Group itemsPerRow={4}>
               {events.map((event) => {
                 return(
-                  <Card as={Link} to={`/events/${event.id}`}>
-                      <Image src={event.imageUrl}/>
+                  <Card as={Link} to={`/events/${event.id}`} key={event.id}>
+                      <Image src={event.imageUrl} style={{height: 200}}/>
                       <Card.Content>
                         <Card.Header>{event.title}</Card.Header>
                         <br />
@@ -48,6 +47,7 @@ class OrganizationDetail extends Component {
               })}
 
             </Card.Group>
+             }
           </Tab.Pane>
 
       }
