@@ -74,7 +74,21 @@ class EventDetail extends Component {
           </Item.Group>
         </Tab.Pane>
         )},
-      { menuItem: 'Event Coordinators', render: () => <Tab.Pane key="2">Event Coordinators</Tab.Pane> },
+      { menuItem: 'Event Coordinators', render: () => (
+        <Tab.Pane key="2">
+          {event.coordinator && (
+          <Item.Group>
+            <Item key={event.coordinator.id}>
+            <Item.Image size="tiny" src={event.coordinator.profileImage} />
+            <Item.Header as="h3">{event.coordinator.displayName}
+              {isLoggedIn &&
+                <Button primary disabled={event.coordinator.id === user.id} onClick={() => initiateChat(user, event.coordinator)}>Send a Message</Button>
+              }
+            </Item.Header>
+          </Item>
+        </Item.Group>)}
+      </Tab.Pane>)
+      },
     ]
     return (
       <div>

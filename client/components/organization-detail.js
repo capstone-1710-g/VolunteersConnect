@@ -55,6 +55,7 @@ class OrganizationDetail extends Component {
     return (
       <div>
         <Segment>
+          <Button as={Link} to={`/organizations/${organization.id}/events/add`} floated="left">Add a new event</Button>
           <Button as={Link} to={'/organizations/' + organization.id + '/edit'} floated="right">Edit this organization</Button>
           <Divider horizontal>Staff Only</Divider>
         </Segment>

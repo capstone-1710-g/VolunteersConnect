@@ -31,11 +31,11 @@ class Routes extends Component {
             <Route path="/signup" component={Signup} />
             {/* <Route exact path="/events/search/:keyword" component={EventsBySearch} /> */}
             <Route exact path="/events/search/:keyword/:radius" component={AllSearchResults} />
-            <Route exact path="/events/add" component={AddEventForm} />
             <Route exact path="/events/:id/edit" component={EditEventForm} />
             <Route exact path="/events/:id" component={EventDetail} />
             <Route exact path="/events" component={AllEvents} />
             <Route exact path="/organizations/add" component={AddOrganizationForm} />
+            <Route exact path="/organizations/:organizationId/events/add" component={AddEventForm} />
             <Route exact path="/organizations/:id/edit" component={EditOrganizationForm} />
             <Route exact path="/organizations/:id" component={OrganizationDetail} />
             <Route exact path="/organizations" component={AllOrganizations} />
