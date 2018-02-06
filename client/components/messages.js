@@ -18,6 +18,7 @@ class Messages extends Component {
       ...messages[id], id
     })).sort((m1, m2) => m1.timestamp > m2.timestamp);
     return (
+    <Segment>
     <Item.Group>
     {messagesArr.map(message => {
       const isFromMe = message.senderId === user.id;
@@ -36,12 +37,14 @@ class Messages extends Component {
       </Item>
     )})}
     </Item.Group>
+    </Segment>
     )
   }
 
   render() {
     const {user, messageSessions} = this.props;
-    const panes = messageSessions.reverse().map(session => {
+    const sortedSessions = messageSessions.sort((s1, s2) => s1.timestamp > s2.timestamp);
+    const panes = sortedSessions.map(session => {
       const otherUser = session.participants[0].id === user.id ?
         session.participants[1] : session.participants[0];
 
@@ -69,7 +72,7 @@ class Messages extends Component {
         <h1>Messages</h1>
         <Segment raised>
         {panes.length ?
-            <Tab menu={{ fluid: true, vertical: true, tabular: 'right' }} panes={panes} defaultActiveIndex={0} /> : <h3>No Messages.</h3>}
+            <Tab menu={{ fluid: true, vertical: true, tabular: 'right' }} panes={panes} /> : <h3>No Messages.</h3>}
         </Segment>
       </div>
     );
@@ -80,7 +83,7 @@ class Messages extends Component {
 
 const mapState = ({ user, messageSessions }) => ({
   user,
-  messageSessions,
+  messageSessions: messageSessions,
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
 });
