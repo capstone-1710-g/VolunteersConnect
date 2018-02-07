@@ -17,7 +17,7 @@ const Main = (props) => {
 
   return (
     <div>
-      <Menu fixed="top" size="large" borderless style={{ backgroundColor: '#dce2e8' }} stackable>
+      <Menu fixed="top" size="large" borderless style={{ backgroundColor: '#dce2e8'}} stackable>
         <Container>
           <Menu.Item as={Link} to="/home" header>
             <Image style={{ height: '5.5em', width: 'auto' }} src="/logo.png"  />
