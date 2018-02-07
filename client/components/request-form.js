@@ -7,20 +7,19 @@ export class RequestForm extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            open: false,
-            firstName: this.props.user.firstName || '',
-            lastName: this.props.user.lastName || '',
-            email: this.props.user.email || '',
-            textArea: ''
+          open: false,
+          reasonToVolunteer: ''
         }
 
         this.handleSubmit = this.handleSubmit.bind(this)
-
     }
 
     handleSubmit() {
-        this.props.signUpForVolunteer({ ...this.state, event: this.props.event, user: this.props.user })
-        console.log('submitted', this.state)
+        this.props.signUpForVolunteer({
+          reasonToVolunteer: this.state.reasonToVolunteer,
+          event: this.props.event,
+          user: this.props.user
+        });
     }
 
     render () {
@@ -31,22 +30,8 @@ export class RequestForm extends Component {
             }}>
                 <Form.Group>
                     <Form.Field>
-                        <label>First Name</label>
-                        <input placeholder='First Name' value={this.state.firstName} onChange={e => this.setState({ firstName: e.target.value })} />
-                    </Form.Field>
-                    <Form.Field>
-                        <label>Last Name</label>
-                        <input placeholder='Last Name' value={this.state.lastName} onChange={e => this.setState({ lastName: e.target.value })} />
-                    </Form.Field>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Field>
-                        <label>Email</label>
-                        <input placeholder='Email' value={this.state.email} onChange={e => this.setState({ email: e.target.value })} />
-                    </Form.Field>
-                    <Form.Field>
                         <label>Why would you like to volunteer for this event?</label>
-                        <textarea value={this.state.textArea} onChange={e => this.setState({ textArea: e.target.value })} />
+                  <textarea value={this.state.reasonToVolunteer} onChange={e => this.setState({ reasonToVolunteer: e.target.value })} />
                     </Form.Field>
                 </Form.Group>
                 <Button type='submit' positive>Complete</Button>
@@ -72,4 +57,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestForm)
+export default connect(mapStateToProps, mapDispatchToProps)(RequestForm);

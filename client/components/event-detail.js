@@ -9,7 +9,8 @@ import { getEventPosts } from '../store/posts';
 import PostForm from './post-form';
 import { createMessageSession } from '../store';
 import history from '../history';
-import RequestFormModal from './request-form-modal'
+import RequestFormModal from './request-form-modal';
+import ViewRequestModal from './view-request-modal';
 import Lightbox from 'react-image-lightbox';
 
 /* -----------------    COMPONENT     ------------------ */
@@ -51,7 +52,10 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { user, event, isAdmin, isLoggedIn, posts, volunteers, signUpForVolunteer, initiateChat } = this.props;
+    const { user, event, isAdmin, isLoggedIn, posts, volunteers, initiateChat } = this.props;
+    const isCoordinator = event.coordinator && (user.id === event.coordinator.id);
+    const isVolunteering = volunteers.some(volunteer => volunteer.id === user.id);
+
     const filteredPosts = posts.filter(post => {
       return post.type && post.type.includes('image') || post.type && post.type.includes('video')
     })
@@ -67,6 +71,12 @@ class EventDetail extends Component {
               <Item.Header as="h3">{volunteer.displayName}
               {isLoggedIn &&
                 <Button primary disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
+              }
+              {volunteer.status === 'pending' && //isCoordinator &&
+                <ViewRequestModal
+                  event={event}
+                  volunteer={volunteer}
+                />
               }
               </Item.Header>
             </Item>)
@@ -108,9 +118,13 @@ class EventDetail extends Component {
                     <Image size="medium" src={event.imageUrl}  />
                   </Grid.Column>
                   <Grid.Column textAlign="center">
-                    {isLoggedIn ?
-                      <RequestFormModal event={event} /> :
-                      <Button as={Link} to={'/signup'}>Sign Up To Volunteer</Button>
+                    {isLoggedIn &&
+                      <RequestFormModal
+                      disabled={isVolunteering}
+                      event={event} />
+                    }
+                    {!isLoggedIn &&
+                      <Button primary as={Link} to={'/signup'}>Sign Up To Volunteer</Button>
                     }
                     <Item.Meta>{event.address}</Item.Meta>
                   </Grid.Column>
@@ -179,9 +193,6 @@ const mapDispatch = (dispatch, ownProps) => ({
   ,
   getEventPosts: () =>
     dispatch(getEventPosts(ownProps.match.params.id))
-  ,
-  signUpForVolunteer: (request) =>
-    dispatch(addVolunteerToEvent(request))
   ,
   initiateChat: (sender, recipient) => {
     const existingRecipients = Object.keys(sender.messageSessions || {}).map(id =>
