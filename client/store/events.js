@@ -50,7 +50,6 @@ export const fetchOrganizationEvents = function (orgId) {
 
   return function(dispatch) {
     const eventsRef = firebase.database().ref('/events').orderByChild('orgId').equalTo(orgId);
-   // dispatch(getEventsByOrganization(snapshot.val()))
     eventsRef.on('value', (snapshot) => {
       let events = snapshot.val() || {};
       events = Object.keys(events).map((eventId) => {
