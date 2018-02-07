@@ -32,7 +32,7 @@ class SearchResults extends Component{
   render(){
 
     const filteredEvents = this.props.searchedEvents.filter((e) => {
-      return e.title.includes(this.state.searchTerm);
+      return e.title.toLowerCase().includes(this.state.searchTerm.toLocaleLowerCase());
     });
     return (
 
