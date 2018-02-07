@@ -31,12 +31,12 @@ class SearchBar extends Component {
   render() {
     return (
 
-      <Button  animated='fade' circular compact={true} onClick={this.handleClick}>
+      <Button animated='fade' circular compact={true} onClick={this.handleClick}>
         <Button.Content visible >
           <Icon name='marker' size='big' color='blue'/>
         </Button.Content>
         <Button.Content hidden>
-          Near Me
+          Events Near Me
         </Button.Content >
       </Button>
 
