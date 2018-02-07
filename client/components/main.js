@@ -28,7 +28,7 @@ const Main = (props) => {
           <Menu.Item as={Link} to="/messages">Messages</Menu.Item>
           }
           <div className="right menu">
-            <Menu.Item>
+            <Menu.Item style={{float: 'left'}}>
               <SearchBar />
             </Menu.Item>
           </div>
