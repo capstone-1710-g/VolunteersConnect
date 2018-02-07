@@ -22,27 +22,23 @@ class Organizations extends Component {
         </Segment>
         <h1>{displayName}</h1>
         {organizations.length > 0 && (
-          <Segment.Group horizontal>
-            <Segment style={{ width: '70%'}}>
-              <Item.Group divided>
-                {organizations.map(organization => (
-                  <Item className="org-list-item" key={organization.id} color="grey" as={Link} to={'/organizations/' + organization.id}>
-                    <Item.Image size="small" src={organization.imageUrl} style={{margin: 'auto'}} />
+        <Segment>
+          <Item.Group divided>
+            {organizations.map(organization => (
+              <Item className="org-list-item" key={organization.id} color="grey" as={Link} to={'/organizations/' + organization.id}>
+                <Item.Image size="small" src={organization.imageUrl} style={{margin: 'auto'}} />
 
-                    <Item.Content>
-                      <Item.Header>{organization.name}</Item.Header>
-                      <Item.Meta>Description</Item.Meta>
-                      <Item.Description>
-                        {organization.description}
-                      </Item.Description>
-                      <Item.Extra>Current Opportunities</Item.Extra>
-                    </Item.Content>
-                  </Item>
-                ))}
-              </Item.Group>
-            </Segment>
-            <Segment style={{ width: '30%' }} />
-          </Segment.Group>
+                <Item.Content>
+                  <Item.Header>{organization.name}</Item.Header>
+                  <Item.Description>
+                    {organization.description}
+                  </Item.Description>
+                  <Item.Extra>Established in {organization.establishedDate}</Item.Extra>
+                </Item.Content>
+              </Item>
+            ))}
+          </Item.Group>
+        </Segment>
         )}
       </div>
     );
