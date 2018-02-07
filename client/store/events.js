@@ -6,19 +6,24 @@ import firebase from 'firebase';
  */
 const GET_EVENTS = 'GET_EVENTS';
 const ADD_NEW_EVENT = 'ADD_NEW_EVENT';
-const GET_ORGANIZATION_EVENTS =
-'GET_ORGANIZATION_EVENTS';
+const GET_EVENTS_BY_ORGANIZATION =
+'GET_EVENTS_BY_ORGANIZATION';
+const GET_EVENTS_BY_USER = 'GET_EVENTS_BY_USER';
+
 /**
  * ACTION CREATORS
  */
 const getEvents = events => ({ type: GET_EVENTS, events });
 
+const addNewEvent = event => ({type: ADD_NEW_EVENT, event});
+
 const getEventsByOrganization = events => ({
-  type: GET_ORGANIZATION_EVENTS, events
+  type: GET_EVENTS_BY_ORGANIZATION, events
 });
 
-
-const addNewEvent = event => ({type: ADD_NEW_EVENT, event})
+const getEventsByUser = events => ({
+  type: GET_EVENTS_BY_USER, events
+})
 
 /**
  * THUNK CREATORS
@@ -34,7 +39,6 @@ export const fetchEvents = () => dispatch => {
   })
 }
 
-
 export const addEvent = event => dispatch => {
   const ref = firebase.database().ref('/events/');
   const key = ref.push().key;
@@ -45,28 +49,40 @@ export const addEvent = event => dispatch => {
   history.push('/events');
 }
 
-
-export const fetchOrganizationEvents = function (orgId) {
-
-  return function(dispatch) {
-    const eventsRef = firebase.database().ref('/events').orderByChild('orgId').equalTo(orgId);
-   // dispatch(getEventsByOrganization(snapshot.val()))
-    eventsRef.on('value', (snapshot) => {
-      let events = snapshot.val() || {};
-      events = Object.keys(events).map((eventId) => {
-        return events[eventId];
-      })
-      dispatch(getEventsByOrganization(events));
-    })
-  }
+export const fetchOrganizationEvents = orgId => dispatch => {
+  const eventsRef = firebase.database().ref('/events').orderByChild('orgId')
+  .equalTo(orgId);
+  eventsRef.on('value', (snapshot) => {
+    let events = snapshot.val() || {};
+    events = Object.keys(events).map((eventId) => {
+      return events[eventId];
+    });
+    dispatch(getEventsByOrganization(events));
+  })
 }
+
+export const fetchEventsByUser = userId => dispatch => {
+  const eventsRef = firebase.database().ref('/events')
+  .orderByChild('/volunteers/' + userId + '/id/')
+  .equalTo(userId);
+
+  eventsRef.on('value', (snapshot) => {
+    let events = snapshot.val() || {};
+    events = Object.keys(events).map((eventId) => {
+      return events[eventId];
+    });
+    dispatch(getEventsByUser(events));
+  });
+}
+
 /**
  * REDUCER
  */
 export default function(state = [], action) {
   switch (action.type) {
     case GET_EVENTS:
-    case GET_ORGANIZATION_EVENTS:
+    case GET_EVENTS_BY_ORGANIZATION:
+    case GET_EVENTS_BY_USER:
       return action.events;
 
     case ADD_NEW_EVENT:

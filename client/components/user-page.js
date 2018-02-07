@@ -1,47 +1,50 @@
-import React, { Component } from 'react'
-import {connect} from 'react-redux'
-import {Image, Grid, Sidebar, Segment, Menu, Icon, Header, Container} from 'semantic-ui-react'
+import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {Item, Segment, Divider} from 'semantic-ui-react';
+import {fetchEventsByUser} from '../store/events';
 
-class UserPage extends Component{
-
-  constructor(){
-    super();
-
+class UserPage extends Component {
+  componentDidMount() {
+    const {user, loadMyEvents} = this.props;
+    loadMyEvents(user.id);
   }
-
-  render(){
-    return(
-
-        <Container textAllign='left'>
-            <Sidebar.Pushable as={Segment} style={{height: 900, width: 800}}>
-              <Sidebar as={Menu} animation='scale down' width='thin' visible={true} icon='labeled' vertical inverted>
-                <Menu.Item name='home'>
-                  <Icon name='home' />
-                  Home
-                </Menu.Item>
-                <Menu.Item name='gamepad'>
-                  <Icon name='gamepad' />
-                  Games
-                </Menu.Item>
-                <Menu.Item name='camera'>
-                  <Icon name='camera' />
-                  Channels
-                </Menu.Item>
-              </Sidebar>
-              <Sidebar.Pusher>
-
-              </Sidebar.Pusher>
-            </Sidebar.Pushable>
-        </Container>
-    )
+  render() {
+    const {user, events} = this.props;
+    return (
+      <div>
+      <Item.Group>
+        <Item key={user.id}>
+          <Item.Image size="small" src={user.profileImage} />
+          <Item.Header as="h3">{user.displayName}
+          </Item.Header>
+          <Item.Description>{user.email}</Item.Description>
+        </Item>
+      </Item.Group>
+      <Segment raised>
+        <h1>My Events</h1>
+        <Divider />
+        <Item.Group divided>
+        {events.map(event => (
+        <Item key={event.id} as={Link} to={'/events/' + event.id}>
+          <Item.Image size="small" src={event.imageUrl} />
+          <Item.Header as="h3">{event.title}
+          </Item.Header>
+        </Item>
+        ))}
+        </Item.Group>
+      </Segment>
+      </div>
+    );
   }
-
 }
 
-const mapState = (state) => {
-  return {
-    user: state.user
-  }
-};
+const mapState = ({user, events}) => ({
+  user, events,
+});
 
-export default connect(mapState)(UserPage);
+const mapDispatch = (dispatch) => ({
+  loadMyEvents: (userId) => dispatch(fetchEventsByUser(userId))
+});
+
+export default connect(mapState, mapDispatch)(UserPage);
