@@ -21,11 +21,11 @@ class OrganizationDetail extends Component {
     const panes = [
       {
         menuItem: {key: 'events', content: 'Events'},
-        render: () =>
+        render: () => (
           <Tab.Pane >
              {events.length > 0 && <Card.Group itemsPerRow={4}>
               {events.map((event) => {
-                return(
+                return (
                   <Card as={Link} to={`/events/${event.id}`} key={event.id}>
                       <Image src={event.imageUrl} style={{height: 200}}/>
                       <Card.Content>
@@ -45,11 +45,10 @@ class OrganizationDetail extends Component {
                   </Card>
                 )
               })}
-
             </Card.Group>
              }
           </Tab.Pane>
-
+        )
       }
     ]
     return (
