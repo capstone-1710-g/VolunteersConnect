@@ -55,7 +55,7 @@ export const sendPost = (content, file, eventId, user) => {
     const feedPost = {
       createdAt: new Date().getTime(),
       eventId,
-      content,
+      content: content || '',
       url,
       type: file ? file.type : null,
       user,

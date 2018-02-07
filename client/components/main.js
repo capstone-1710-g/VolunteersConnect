@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import {SearchBar} from './index'
-import { Container, Menu, Image, Button } from 'semantic-ui-react'
-import { logout, createUser } from '../store/user'
+import { Container, Menu, Image, Button, Icon } from 'semantic-ui-react'
+import { onSignIn, logout, createUser } from '../store/user'
 
 /**
  * COMPONENT
@@ -13,7 +13,7 @@ import { logout, createUser } from '../store/user'
  *  rendered out by the component's `children`.
  */
 const Main = (props) => {
-  const { children, handleClick, isLoggedIn, isAdmin, user } = props
+  const { children, handleClick, isLoggedIn, isAdmin, user, onGoogleSignIn } = props
 
   return (
     <div>
@@ -50,8 +50,13 @@ const Main = (props) => {
                 {/* <Menu.Item as={Button} onClick={props.generateRandomUser}>
                   Log In As Random User
                 </Menu.Item> */}
-                <Menu.Item as={Link} to="/login">Login</Menu.Item>
-                <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
+                {/* <Menu.Item as={Link} to="/login">Login</Menu.Item>
+                <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item> */}
+                <Menu.Item>
+                  <Button onClick={() => onGoogleSignIn()}>
+                  <Icon name="google" />Log In With Google
+                  </Button>
+                </Menu.Item>
               </div>
           }
         </Container>
@@ -77,6 +82,9 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => ({
   handleClick() {
     dispatch(logout())
+  },
+  onGoogleSignIn: () => {
+    dispatch(onSignIn())
   },
   generateRandomUser: () => {
     fetch('https://randomuser.me/api/')

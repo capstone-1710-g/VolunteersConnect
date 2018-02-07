@@ -63,7 +63,8 @@ const mapStateToProps = ({ post, user }) => ({
 const mapDispatchToProps = (dispatch) => ({
   handlePost: (values, eventId, user) => {
     const {file, content} = values;
-    dispatch(sendPost(content, file, eventId, user));
+    const {messageSession, ...rest} = user;
+    dispatch(sendPost(content, file, eventId, {...rest}));
     dispatch(reset('postForm'));
   },
 });

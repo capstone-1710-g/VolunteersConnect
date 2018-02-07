@@ -7,12 +7,13 @@ import {Image} from 'semantic-ui-react'
  * COMPONENT
  */
 export const UserHome = (props) => {
-  const {email} = props
+  const {displayName, isLoggedIn} = props
 
   return (
     <div>
-      <h3>Welcome, {email}</h3>
-
+      {isLoggedIn &&
+      <h3>Welcome, {displayName}</h3>
+      }
       <Image src="volunteer.jpeg" />
     </div>
   )
@@ -21,9 +22,10 @@ export const UserHome = (props) => {
 /**
  * CONTAINER
  */
-const mapState = (state) => {
+const mapState = ({user}) => {
   return {
-    email: state.user.email
+    isLoggedIn: !!user.id,
+    displayName: user.displayName,
   }
 }
 
