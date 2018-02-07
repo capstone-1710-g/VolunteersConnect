@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchEventDetail, addVolunteerToEvent } from '../store/event';
-import { Item, Header, Segment, Button, Divider, Image, Grid, Tab } from 'semantic-ui-react';
+import { Item, Header, Segment, Button, Divider, Image, Grid, Tab, Modal } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
@@ -147,29 +147,10 @@ class EventDetail extends Component {
               <PostForm event={event} />
             </Segment>
             <div>
-              <button type="button" onClick={() => this.setState({ isOpen: true })}>
-                View Memory
-              </button>
-              {
-                isOpen && <EventMemory posts={filteredPosts} />
+                <Modal trigger={<Button>View Memory</Button>} basic size='mini'>
+                  <EventMemory posts={filteredPosts} />
+                </Modal>
 
-                // <Lightbox
-                //   mainSrc={filteredPosts[photoIndex].url}
-                //   nextSrc={filteredPosts[(photoIndex + 1) % filteredPosts.length]}
-                //   prevSrc={filteredPosts[(photoIndex + filteredPosts.length - 1) % filteredPosts.length]}
-                //   onCloseRequest={() => this.setState({ isOpen: false })}
-                //   onMovePrevRequest={() =>
-                //     this.setState({
-                //       photoIndex: (photoIndex + filteredPosts.length - 1) % filteredPosts.length,
-                //     })
-                //   }
-                //   onMoveNextRequest={() =>
-                //     this.setState({
-                //       photoIndex: (photoIndex + 1) % filteredPosts.length,
-                //     })
-                //   }
-                // />
-              }
             </div>
           </Segment.Group>
         )}
