@@ -23,15 +23,15 @@ const Main = (props) => {
             <Image style={{ height: '5.5em', width: 'auto' }} src="/logo.png"  />
           </Menu.Item>
           <Menu.Item as={Link} to="/events">Events</Menu.Item>
+          <Menu.Item style={{ float: 'left' }}>
+            <SearchBar />
+          </Menu.Item>
           <Menu.Item as={Link} to="/organizations">Organizations</Menu.Item>
           { isLoggedIn &&
           <Menu.Item as={Link} to="/messages">Messages</Menu.Item>
           }
-          <div className="right menu">
-            <Menu.Item style={{float: 'left'}}>
-              <SearchBar />
-            </Menu.Item>
-          </div>
+          {/* <div className="right menu">
+          </div> */}
           {
             isLoggedIn
               ? <div className="right menu">

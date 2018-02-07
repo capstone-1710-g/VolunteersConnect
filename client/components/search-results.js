@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {SearchMap} from '../components';
 import {fetchEventsByLocation} from '../store';
-import { Item, Segment, Image, Icon, Button, Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Item, Segment, Image, Icon, Button, Menu, Input, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class SearchResults extends Component{
@@ -37,9 +37,9 @@ class SearchResults extends Component{
     return (
 
       <div>
-        <Segment>
-          <Input placeholder="Filter by keyword..." onChange={this.onSearchTermChange} />
-        </Segment>
+        <h1>Nearby Events</h1>
+        <Divider />
+        <Input fluid placeholder="Filter Events by keyword..." onChange={this.onSearchTermChange} />
         <Segment.Group horizontal>
           <SearchMap
           searchedEvents={filteredEvents}
