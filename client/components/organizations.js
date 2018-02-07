@@ -12,14 +12,15 @@ class Organizations extends Component {
   }
 
   render() {
-    const { organizations, displayName, isAdmin } = this.props;
+    const { organizations, displayName, isLoggedIn } = this.props;
     return (
       <div>
-        {/* {this.user && this.user.isAdmin &&  */}
+        {isLoggedIn &&
         <Segment>
           <Button as={Link} to="/organizations/add" floated="right">Add a new Organization</Button>
-          <Divider horizontal>Staff Only</Divider>
+          <Divider horizontal>Regiestered User Only</Divider>
         </Segment>
+        }
         <h1>{displayName}</h1>
         {organizations.length > 0 && (
         <Segment>
@@ -51,6 +52,7 @@ const mapAllOrganizationsState = ({ user, organizations }) => ({
   user,
   organizations: Object.keys(organizations).map(id => ({ ...organizations[id], id })),
   displayName: 'All Organizations',
+  isLoggedIn: !!user.id,
   isAdmin: user && user.role === 'admin',
 });
 

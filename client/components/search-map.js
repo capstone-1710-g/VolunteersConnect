@@ -23,7 +23,6 @@ export default class SearchMap extends Component{
 
     const markers = searchedEvents.map((event) => {
       return (
-
           <MapMarker
             key={event.id}
             lat={event.location.lat}
@@ -36,29 +35,26 @@ export default class SearchMap extends Component{
     return (
        searchedEvents.length > 0 &&
 
-                <Segment style={{height: '70%'}}>
-                  <GoogleMap
-                    style={{ width: 600, height: 600 }}
-                    bootstrapURLKeys={{
-                      key: "AIzaSyB3Aatep0EJEfPULjK9ok32wLnJcapWx84"
-                    }}
-                    defaultCenter= {{
-                      lat: 40.758896,
-                      lng: -73.985130
-                    }}
-                    defaultZoom={12}
-                    center={mapCenter}
-                  >
-
-                    {
-                      markers
-                    }
-                  </GoogleMap>
-                </Segment>
-
+      <Segment style={{height: '70%'}}>
+        <GoogleMap
+          style={{ width: 600, height: 600 }}
+          bootstrapURLKeys={{
+            key: "AIzaSyB3Aatep0EJEfPULjK9ok32wLnJcapWx84"
+          }}
+          defaultCenter= {{
+            lat: 40.758896,
+            lng: -73.985130
+          }}
+          defaultZoom={12}
+          center={mapCenter}
+        >
+        {
+          markers
+        }
+        </GoogleMap>
+      </Segment>
     )
   }
-
 }
 
 const style = {

@@ -17,7 +17,7 @@ class OrganizationDetail extends Component {
   }
 
   render() {
-    const { organization, isAdmin, isLoggedIn, events } = this.props;
+    const { organization, user, isAdmin, isLoggedIn, events, isCoordinator} = this.props;
     const panes = [
       {
         menuItem: {key: 'events', content: 'Events'},
@@ -33,11 +33,11 @@ class OrganizationDetail extends Component {
                         <br />
                         <Card.Meta>
                           <div>
-                            <Icon name='calendar outline' size= 'large'/>
+                            <Icon name="calendar outline" size= "large"/>
                             {` ${event.date}`}
                             <br />
                             <br />
-                            <Icon name='marker' size= 'large' />
+                            <Icon name="marker" size= "large" />
                             {` ${event.address}`}
                           </div>
                         </Card.Meta>
@@ -50,32 +50,48 @@ class OrganizationDetail extends Component {
           </Tab.Pane>
         )
       }
-    ]
+    ];
+    const coordinator = organization.coordinator || {};
     return (
       <div>
+        {isCoordinator &&
         <Segment>
           <Button as={Link} to={`/organizations/${organization.id}/events/add`} floated="left">Add a new event</Button>
           <Button as={Link} to={'/organizations/' + organization.id + '/edit'} floated="right">Edit this organization</Button>
-          <Divider horizontal>Staff Only</Divider>
+          <Divider horizontal>Coordinator Only</Divider>
         </Segment>
+        }
+        <Header as="h1" dividing>{organization.name}</Header>
         <Segment>
+          <Item.Group>
           <Item>
-            <Header as="h1" dividing>{organization.name}</Header>
+            <Item.Image size="large" src={organization.imageUrl} />
             <Item.Content>
-              {isAdmin && <Item.Content as="h4">Organization ID: {organization.id}</Item.Content>}
-              <Grid columns={2} relaxed>
-                <Grid.Column>
-                  <Item.Image size="large" src={organization.imageUrl} />
-                  <Item.Meta>{organization.baseLocation}</Item.Meta>
-                </Grid.Column>
-                <Grid.Column>
-                  <Item.Meta as="h3">Description</Item.Meta>
-                  <Item.Meta as="h5">Date Founded: {organization.establishedDate}</Item.Meta>
-                  <Item.Description as={Markdown}>{organization.description}</Item.Description>
-                </Grid.Column>
-              </Grid>
+              <Item.Meta as="h3">Established in {organization.establishedDate}</Item.Meta>
+              <Item.Meta>
+                <Icon name="marker" size="large" />
+                {organization.baseLocation}
+              </Item.Meta>
+              <Item.Description as={Markdown}>{organization.description}</Item.Description>
+              <Item.Extra>
+              <Item.Group>
+              {coordinator.id &&
+                <Item key={coordinator.id}>
+                  <Item.Image size="mini" src={coordinator.profileImage} />
+                  <Item.Content verticalAlign="middle">
+                    <Item.Header as="h3">Coordinator: {coordinator.displayName}
+                      {isLoggedIn &&
+                        <Button primary disabled={coordinator.id === user.id} onClick={() => initiateChat(user, coordinator)}>Send a Message</Button>
+                      }
+                    </Item.Header>
+                  </Item.Content>
+                </Item>
+              }
+              </Item.Group>
+              </Item.Extra>
             </Item.Content>
           </Item>
+          </Item.Group>
         </Segment>
         <Tab panes={panes} />
 
@@ -91,7 +107,8 @@ const mapState = ({ user, organization, events }, ownProps) => ({
   organization: {...organization, id: ownProps.match.params.id},
   isAdmin: user && user.role === 'admin',
   isLoggedIn: !!user.id,
-  events
+  events, user,
+  isCoordinator: organization.coordinator && (user.id === organization.coordinator.id),
 });
 
 const mapDispatch = (dispatch, ownProps) => ({

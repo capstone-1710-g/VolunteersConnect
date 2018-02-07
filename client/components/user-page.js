@@ -13,21 +13,19 @@ class UserPage extends Component {
     const {user, events} = this.props;
     return (
       <div>
-      <Item.Group>
-        <Item key={user.id}>
-          <Item.Image size="small" src={user.profileImage} />
-          <Item.Header as="h3">{user.displayName}
-          </Item.Header>
-          <Item.Description>{user.email}</Item.Description>
-        </Item>
-      </Item.Group>
+      <Item key={user.id}>
+        <Item.Image size="small" src={user.profileImage} />
+        <Item.Header as="h3">{user.displayName}
+        </Item.Header>
+        <Item.Description>{user.email}</Item.Description>
+      </Item>
       <Segment raised>
         <h1>My Events</h1>
         <Divider />
         <Item.Group divided>
         {events.map(event => (
         <Item key={event.id} as={Link} to={'/events/' + event.id}>
-          <Item.Image size="small" src={event.imageUrl} />
+          <Item.Image size="tiny" src={event.imageUrl} />
           <Item.Header as="h3">{event.title}
           </Item.Header>
         </Item>

@@ -114,7 +114,7 @@ const mapAddFormDispatch = (dispatch, ownProps) => ({
         ...values,
         location,
         orgId: ownProps.match.params.organizationId,
-        coordinator,
+        coordinator: coordinator || {},
       };
       dispatch(addEvent(newEvent));
     })
