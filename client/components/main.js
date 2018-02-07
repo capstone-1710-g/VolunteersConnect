@@ -47,9 +47,9 @@ const Main = (props) => {
               </div>
               : <div className="right menu">
                 {/* The navbar will show these links before you log in */}
-                <Menu.Item as={Button} onClick={props.generateRandomUser}>
+                {/* <Menu.Item as={Button} onClick={props.generateRandomUser}>
                   Log In As Random User
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item as={Link} to="/login">Login</Menu.Item>
                 <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
               </div>
