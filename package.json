@@ -57,7 +57,8 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.77.2",
     "sequelize": "^4.3.1",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "video-react": "^0.9.4"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.9.0",

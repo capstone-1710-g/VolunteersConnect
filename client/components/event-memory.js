@@ -1,22 +1,27 @@
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
+import { Player } from 'video-react';
+ // import css
 // import Styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const EventMemory = function(props){
-  console.log(props.posts)
   return(
-      <Carousel>
+      <Carousel
+      showThumbs={false}
+      showStatus={false}
+      useKeyboardArrows
+      >
 
           {props.posts.map((post) => {
             if(post.type.includes('video'))
               return (
-                <div>
+                <div style={{width:'100%', height:'100%'}}>
                   {renderVideo(post)}
                </div>
               )
             else
             return (
-              <div><iframe src={post.url} /></div>
+              <div><img src={post.url} /></div>
             )
 
           })}
@@ -25,8 +30,8 @@ const EventMemory = function(props){
 }
 
 const renderVideo = (post) => (
-  <video controls width="100%" height="auto">
-    <source src={post.url} type={post.type} />
-  </video>
+  <Player>
+    <source src={post.url} />
+  </Player>
 );
 export default EventMemory;
