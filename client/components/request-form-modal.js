@@ -18,7 +18,7 @@ class RequestFormModal extends Component {
     render() {
         return (
             <Modal
-                trigger={<Button positive onClick={this.toggleModal}>Volunteer for this event!</Button>}
+                trigger={<Button disabled={this.props.disabled} positive onClick={this.toggleModal}>Volunteer for this event!</Button>}
                 open={this.state.isOpen}
             >
                 <Modal.Header>Volunteer</Modal.Header>
