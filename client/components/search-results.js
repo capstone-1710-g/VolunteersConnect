@@ -37,36 +37,31 @@ class SearchResults extends Component{
     return (
 
       <div>
-          <Menu horizontal style={{maxHeight: 400, overflow: 'auto'}}>
-              <Menu.Item>
-              <Input placeholder='Search...' onChange={this.onSearchTermChange} />
-              </Menu.Item>
-          </Menu>
-
-          <Segment.Group horizontal>
-              <SearchMap
-              searchedEvents={filteredEvents}
-              zipcode={this.props.match.params.keyword}
-              />
-
-
-            <Segment raised style={{width: "30%", maxHeight: 600, overflow: 'auto'}}>
-                <Item.Group divided>
-                  {filteredEvents.map(event => (
-                    <Item key={event.id} color="grey" as={Link} to={'/events/' + event.id}>
-                      <Item.Image size="small" src={event.imageUrl} />
-                      <Item.Content>
-                        <Item.Header>
-                          {event.title}
-                        </Item.Header>
-                        <Item.Description>
-                          {event.description}
-                        </Item.Description>
-                      </Item.Content>
-                    </Item>
-                  ))}
-                </Item.Group>
-          </Segment>
+        <Segment>
+          <Input placeholder="Filter by keyword..." onChange={this.onSearchTermChange} />
+        </Segment>
+        <Segment.Group horizontal>
+          <SearchMap
+          searchedEvents={filteredEvents}
+          zipcode={this.props.match.params.keyword}
+        />
+        <Segment raised style={{width: '30%', maxHeight: 600, overflow: 'auto'}}>
+          <Item.Group divided>
+            {filteredEvents.map(event => (
+              <Item key={event.id} color="grey" as={Link} to={'/events/' + event.id}>
+                <Item.Image size="small" src={event.imageUrl} />
+                <Item.Content>
+                  <Item.Header>
+                    {event.title}
+                  </Item.Header>
+                  <Item.Description>
+                    {event.description}
+                  </Item.Description>
+                </Item.Content>
+              </Item>
+            ))}
+          </Item.Group>
+        </Segment>
 
       </Segment.Group>
     </div>

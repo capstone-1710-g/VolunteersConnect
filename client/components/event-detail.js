@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchEventDetail } from '../store/event';
-import { Item, Header, Segment, Button, Divider, Image, Grid, Tab, Modal, Container } from 'semantic-ui-react';
+import { Item, Header, Segment, Button, Divider, Image, Grid, Tab, Modal, Container, Icon } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 import EventFeed from './event-feed';
 import { getEventPosts } from '../store/posts';
@@ -41,8 +41,9 @@ class EventDetail extends Component {
   }
 
   renderDetail() {
-    const { user, event, isLoggedIn, volunteers } = this.props;
+    const { user, event, isLoggedIn, volunteers, isCoordinator } = this.props;
     const isVolunteering = isLoggedIn && volunteers.some(volunteer => volunteer.id === user.id);
+
     return (
       <Tab.Pane key="detail">
       <Item>
@@ -54,13 +55,16 @@ class EventDetail extends Component {
           <Grid.Column textAlign="center">
             {isLoggedIn &&
               <RequestFormModal
-                disabled={isVolunteering}
+                disabled={isVolunteering || isCoordinator}
                 event={event} />
             }
             {!isLoggedIn &&
               <Button primary as={Link} to={'/signup'}>Sign Up To Volunteer</Button>
             }
-            <Item.Meta>{event.address}</Item.Meta>
+            <Item.Meta>
+              <Icon name="marker" size="large" />
+              {event.address}
+            </Item.Meta>
           </Grid.Column>
         </Grid>
         <Item.Content>
@@ -78,8 +82,8 @@ class EventDetail extends Component {
   }
 
   renderEventMembers(volunteers, coordinator) {
-    const {user, isLoggedIn, initiateChat} = this.props;
-    const isCoordinator = event.coordinator && (user.id === event.coordinator.id);
+    const { user, isLoggedIn, initiateChat, isCoordinator} = this.props;
+
     const panes = [
       {
         menuItem: 'Volunteers', render: () => (
@@ -93,7 +97,7 @@ class EventDetail extends Component {
                       {isLoggedIn &&
                         <Button primary disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
                       }
-                      {volunteer.status === 'pending' && //isCoordinator &&
+                      {volunteer.status === 'pending' && isCoordinator &&
                         <ViewRequestModal
                           event={event}
                           volunteer={volunteer}
@@ -157,7 +161,7 @@ class EventDetail extends Component {
   }
 
   render() {
-    const { event } = this.props;
+    const { event, isCoordinator } = this.props;
 
     const tabPanes = [
       {menuItem: 'Details', render: () => this.renderDetail()},
@@ -167,10 +171,10 @@ class EventDetail extends Component {
 
     return (
       <div>
-        {event.id &&
+        {event.id && isCoordinator &&
         <Segment>
           <Button as={Link} to={'/events/' + event.id + '/edit'} floated="right">Edit this event</Button>
-          <Divider horizontal>Staff Only</Divider>
+          <Divider horizontal>Event Coordinator Only</Divider>
         </Segment>}
         <Tab panes={tabPanes} />
       </div>
@@ -187,6 +191,7 @@ const mapState = ({user, event, posts }) => ({
   isLoggedIn: !!user.id,
   posts: Object.keys(posts).map(id => ({ ...posts[id], id })),
   volunteers: event.volunteers ? Object.keys(event.volunteers).map(id => event.volunteers[id]) : [],
+  isCoordinator: event.coordinator && (user.id === event.coordinator.id),
 });
 
 const mapDispatch = (dispatch, ownProps) => ({

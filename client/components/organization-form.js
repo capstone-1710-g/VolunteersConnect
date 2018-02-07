@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { addOrganization } from '../store/organizations';
 import { fetchOrganizationDetail, editOrganizationDetail } from '../store/organization';
 import { Form, Segment } from 'semantic-ui-react';
+import messageSessions from '../store/messageSessions';
 
 class OrganizationForm extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class OrganizationForm extends Component {
         <h1>{displayName}</h1>
         <Segment>
           <div>
-            <Form name={name} onSubmit={(e) => handleSubmit(e, this.state)}>
+            <Form name={name} onSubmit={(e) => handleSubmit(e, this.state, user)}>
               {fields.map(field => this.renderInputField(field))}
               <div>
                 <Form.Button>{displayName}</Form.Button>
@@ -102,9 +103,13 @@ const mapEditFormState = (state) => ({
 
 const mapAddFormDispatch = (dispatch) => ({
   load: () => ({}),
-  handleSubmit: (e, organization) => {
+  handleSubmit: (e, organization, user) => {
+    const {messageSessions, ...rest} = user;
     e.preventDefault();
-    dispatch(addOrganization(organization));
+    dispatch(addOrganization({
+      ...organization,
+      coordinator: {...rest}
+    }));
   },
 });
 
