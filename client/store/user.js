@@ -22,6 +22,7 @@ const getUser = user => ({ type: GET_USER, user })
 //THUNKS
 
 export const me = () => dispatch => {
+  console.log('CURRENT USER', firebase.auth().currentUser);
   dispatch(getUser(firebase.auth().currentUser || {}));
 }
 
@@ -63,7 +64,6 @@ export const onSignIn = () => dispatch => {
 }
 
 export const logout = () => dispatch => {
-  console.log(firebase.auth().currentUser)
   firebase.auth().signOut()
     .then(() => {
       dispatch(me())

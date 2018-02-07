@@ -92,10 +92,13 @@ class EventDetail extends Component {
               {
                 volunteers.map(volunteer =>
                   (<Item key={volunteer.id}>
-                    <Item.Image size="tiny" src={volunteer.profileImage} />
+                    <Item.Image size="tiny" src={volunteer.profileImage}
+                      style={{ marginRight: 10 }}/>
                     <Item.Header as="h3">{volunteer.displayName}
                       {isLoggedIn &&
-                        <Button primary disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
+                        <Button
+                        primary style={{marginLeft: 10}}
+                        disabled={volunteer.id === user.id} onClick={() => initiateChat(user, volunteer)}>Send a Message</Button>
                       }
                       {volunteer.status === 'pending' && isCoordinator &&
                         <ViewRequestModal
