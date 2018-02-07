@@ -50,6 +50,7 @@
     "react-responsive-carousel": "^3.1.33",
     "react-router-dom": "^4.1.1",
     "react-semantic-redux-form": "^1.2.5",
+    "react-slick": "^0.18.0",
     "react-youtube": "^7.5.0",
     "redux": "^3.6.0",
     "redux-form": "7.1.2",
@@ -57,6 +58,7 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.77.2",
     "sequelize": "^4.3.1",
+    "slick-carousel": "^1.8.1",
     "socket.io": "^2.0.3",
     "video-react": "^0.9.4"
   },

@@ -1,37 +1,64 @@
 import React from 'react';
-import { Carousel } from 'react-responsive-carousel';
 import { Player } from 'video-react';
- // import css
-// import Styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
+
+import { Card, Image, Embed, Modal } from 'semantic-ui-react';
+
+const settings = {
+  dots: true
+};
 
 const EventMemory = function(props){
   return(
-      <Carousel
-      showThumbs={false}
-      showStatus={false}
-      useKeyboardArrows
-      >
+      // <Carousel
+      // showThumbs={false}
+      // showStatus={false}
+      // useKeyboardArrows
+      // >
 
-          {props.posts.map((post) => {
-            if(post.type.includes('video'))
+
+      // </Carousel>
+
+      <Card.Group itemsPerRow={4} style={{maxHeight: '60%', overflow: 'auto'}}>
+
+        {props.posts.map((post) => {
+            let media;
+            if (post.type.includes('video')){
+              media = renderVideo(post);
               return (
-                <div style={{width:'100%', height:'100%'}}>
-                  {renderVideo(post)}
-               </div>
+                <Card style={{width:'25%'}}>
+                  <Modal
+                  trigger={media}
+                  >
+                  <Modal.Content>
+                    {media}
+                  </Modal.Content>
+                  </Modal>
+               </Card>
               )
-            else
-            return (
-              <div><img src={post.url} /></div>
+            }
+            else {
+              media = <Image src={post.url} fluid rounded style={{height: '100%'}}/>;
+              return (
+              <Card style={{width:'25%'}}>
+                <Modal
+                  trigger={media}
+                  >
+                  <Modal.Content>
+                    {media}
+                  </Modal.Content>
+                </Modal>
+              </Card>
             )
+          }
 
-          })}
-      </Carousel>
+       })}
+      </Card.Group>
   );
 }
 
 const renderVideo = (post) => (
-  <Player>
-    <source src={post.url} />
-  </Player>
+  <video controls style={{width:'100%', height: 'auto'}} >
+    <source src={post.url} type={post.type}/>
+  </video>
 );
 export default EventMemory;
