@@ -12,7 +12,7 @@ import history from '../history';
 import RequestFormModal from './request-form-modal';
 import ViewRequestModal from './view-request-modal';
 import Lightbox from 'react-image-lightbox';
-
+import EventMemory from './event-memory';
 /* -----------------    COMPONENT     ------------------ */
 
 const customStyles = {
@@ -151,23 +151,24 @@ class EventDetail extends Component {
                 View Memory
               </button>
               {
-                isOpen &&
-                <Lightbox
-                  mainSrc={filteredPosts[photoIndex].url}
-                  nextSrc={filteredPosts[(photoIndex + 1) % filteredPosts.length]}
-                  prevSrc={filteredPosts[(photoIndex + filteredPosts.length - 1) % filteredPosts.length]}
-                  onCloseRequest={() => this.setState({ isOpen: false })}
-                  onMovePrevRequest={() =>
-                    this.setState({
-                      photoIndex: (photoIndex + filteredPosts.length - 1) % filteredPosts.length,
-                    })
-                  }
-                  onMoveNextRequest={() =>
-                    this.setState({
-                      photoIndex: (photoIndex + 1) % filteredPosts.length,
-                    })
-                  }
-                />
+                isOpen && <EventMemory posts={filteredPosts} />
+
+                // <Lightbox
+                //   mainSrc={filteredPosts[photoIndex].url}
+                //   nextSrc={filteredPosts[(photoIndex + 1) % filteredPosts.length]}
+                //   prevSrc={filteredPosts[(photoIndex + filteredPosts.length - 1) % filteredPosts.length]}
+                //   onCloseRequest={() => this.setState({ isOpen: false })}
+                //   onMovePrevRequest={() =>
+                //     this.setState({
+                //       photoIndex: (photoIndex + filteredPosts.length - 1) % filteredPosts.length,
+                //     })
+                //   }
+                //   onMoveNextRequest={() =>
+                //     this.setState({
+                //       photoIndex: (photoIndex + 1) % filteredPosts.length,
+                //     })
+                //   }
+                // />
               }
             </div>
           </Segment.Group>
