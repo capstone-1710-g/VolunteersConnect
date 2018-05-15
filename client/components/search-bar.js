@@ -20,11 +20,6 @@ class SearchBar extends Component {
   handleClick(event) {
     console.log('adasd')
     event.preventDefault();
-    // if (this.state.keyword.length){
-    //   const keyword = this.state.keyword;
-    //   this.setState({ keyword: '' });
-    //   this.props.searchEvents(keyword);
-    // }
     this.props.searchEvents('10004');
   }
 
@@ -57,13 +52,3 @@ const mapDispatch = (dispatch) => {
 };
 
 export default connect(null, mapDispatch)(SearchBar);
-
-
-
-  /* /* <Form onSubmit={this.handleSubmit}>
-          <Form.Input
-          action={{ icon: 'search' }}
-          onChange={this.handleChange}
-          value={this.state.keyword}
-          placeholder="Search Events by ZIP Code..." />
-        </Form> */

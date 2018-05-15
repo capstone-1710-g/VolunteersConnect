@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { addOrganization } from '../store/organizations';
 import { fetchOrganizationDetail, editOrganizationDetail } from '../store/organization';
 import { Form, Segment } from 'semantic-ui-react';
-import messageSessions from '../store/messageSessions';
 
 class OrganizationForm extends Component {
   constructor(props) {
@@ -87,7 +86,6 @@ const mapAddFormState = (state) => ({
     imageUrl: '', establishedDate: '',
   },
   fields: fields,
-  // error: state.user.error
 });
 
 const mapEditFormState = (state) => ({
@@ -133,5 +131,4 @@ OrganizationForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  // error: PropTypes.object
 };

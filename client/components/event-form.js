@@ -80,7 +80,6 @@ const mapAddFormState = ({organization}) => ({
   displayName: 'Add a New Event',
   fields,
   organization,
-  // error: state.user.error
 });
 
 const mapEditFormState = ({event}) => ({
@@ -147,5 +146,4 @@ EventForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  // error: PropTypes.object
 };

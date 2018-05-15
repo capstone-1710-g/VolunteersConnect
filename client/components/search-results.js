@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {SearchMap} from '../components';
 import {fetchEventsByLocation} from '../store';
-import { Item, Segment, Image, Icon, Button, Menu, Input, Divider } from 'semantic-ui-react';
+import { Item, Segment, Input, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class SearchResults extends Component{
@@ -22,7 +22,6 @@ class SearchResults extends Component{
     if (!searchedEvents.length){
       this.props.fetchSearchEvents(keyword, radius);
     }
-
   }
 
   onSearchTermChange(e){
@@ -65,24 +64,18 @@ class SearchResults extends Component{
 
       </Segment.Group>
     </div>
-
     )
-
   }
-
 }
 
 const mapAllSearchResultsState = ({searchedEvents}) => {
   return {
     searchedEvents
   }
-
 }
 
 const mapAllSearchResultsDispatch = (dispatch) => ({
-
   fetchSearchEvents: (zipcode, radius) => dispatch(fetchEventsByLocation(zipcode, radius))
-
 });
 
 export const AllSearchResults = connect(mapAllSearchResultsState, mapAllSearchResultsDispatch)(SearchResults);

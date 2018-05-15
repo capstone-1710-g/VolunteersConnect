@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
   fetchEvents,
 } from '../store/events';
-import { Button, Segment, Divider, Item, Image } from 'semantic-ui-react'
+import { Segment, Item } from 'semantic-ui-react'
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -14,7 +14,7 @@ class Events extends Component {
   }
 
   render() {
-    const { events, displayName, isAdmin } = this.props;
+    const { events, displayName } = this.props;
     return (
       <div>
         <h1>{displayName}</h1>

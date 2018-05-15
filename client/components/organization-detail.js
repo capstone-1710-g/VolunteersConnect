@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchOrganizationDetail} from '../store/organization';
 import { fetchOrganizationEvents } from '../store';
-import { Item, Header, Segment, Button, Divider, Grid, Tab, Card, Image, Icon } from 'semantic-ui-react';
+import { Item, Header, Segment, Button, Divider, Tab, Card, Image, Icon } from 'semantic-ui-react';
 import Markdown from 'react-markdown';
 
 
@@ -17,7 +17,7 @@ class OrganizationDetail extends Component {
   }
 
   render() {
-    const { organization, user, isAdmin, isLoggedIn, events, isCoordinator} = this.props;
+    const { organization, user, isLoggedIn, events, isCoordinator} = this.props;
     const panes = [
       {
         menuItem: {key: 'events', content: 'Events'},

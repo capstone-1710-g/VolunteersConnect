@@ -157,9 +157,7 @@ class EventDetail extends Component {
 
     return (
     <Tab.Pane key="memory">
-      {/* <Modal trigger={<Button>View Memory</Button>} basic size="mini"> */}
         <EventMemory posts={filteredPosts} />
-      {/* </Modal> */}
     </Tab.Pane>)
   }
 

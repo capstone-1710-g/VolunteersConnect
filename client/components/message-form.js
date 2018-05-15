@@ -6,7 +6,7 @@ import { Field, reduxForm, reset } from 'redux-form';
 import { TextAreaField } from 'react-semantic-redux-form';
 
 const MessageForm = props => {
-  const { handleSubmit, handleMessage, error, isLoggedIn } = props;
+  const { handleSubmit, handleMessage, isLoggedIn } = props;
   return (
     <Form
       reply style={{ display: 'flex', flexDirection: 'column' }}
