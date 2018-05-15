@@ -78,23 +78,3 @@ export default function (state = defaultUser, action) {
       return state
   }
 }
-
-
-// export const facebookLogin = () => {
-//     firebase.auth().signInWithPopup(provider)
-//     .then((result) => {
-//         let facebookUser = result.user
-//         console.log('resulllllttttt', facebookUser)
-//     })
-// }
-
-// export const facebookLogout = () => {
-//     console.log(firebase.auth().currentUser)
-//     firebase.auth().signOut()
-//         .then(() => {
-//             localStorage.clear();
-//             console.log('Signout successful!')
-//             console.log(firebase.auth().currentUser)
-
-//         })
-// }

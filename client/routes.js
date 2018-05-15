@@ -20,16 +20,13 @@ class Routes extends Component {
   }
 
   render () {
-    const {isLoggedIn, isAdmin} = this.props
+    const {isLoggedIn} = this.props
 
     return (
       <Router history={history}>
         <Main>
           <Switch>
             {/* Routes placed here are available to all visitors */}
-            {/* <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} /> */}
-            {/* <Route exact path="/events/search/:keyword" component={EventsBySearch} /> */}
             <Route exact path="/events/search/:keyword/:radius" component={AllSearchResults} />
             <Route exact path="/events/:id/edit" component={EditEventForm} />
             <Route exact path="/events/:id" component={EventDetail} />

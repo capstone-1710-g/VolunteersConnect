@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
-
-import { Item, Segment, Image, Icon, Button, Menu, Input, Dropdown } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import MapMarker from './map-marker';
 
 export default class SearchMap extends Component{

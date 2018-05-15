@@ -6,12 +6,6 @@ import {SearchBar} from './index'
 import { Container, Menu, Image, Button, Icon } from 'semantic-ui-react'
 import { onSignIn, logout, createUser } from '../store/user'
 
-/**
- * COMPONENT
- *  The Main component is our 'picture frame' - it displays the navbar and anything
- *  else common to our entire app. The 'picture' inside the frame is the space
- *  rendered out by the component's `children`.
- */
 const Main = (props) => {
   const { children, handleClick, isLoggedIn, isAdmin, user, onGoogleSignIn } = props
 
@@ -30,8 +24,6 @@ const Main = (props) => {
           { isLoggedIn &&
           <Menu.Item as={Link} to="/messages">Messages</Menu.Item>
           }
-          {/* <div className="right menu">
-          </div> */}
           {
             isLoggedIn
               ? <div className="right menu">
@@ -47,11 +39,6 @@ const Main = (props) => {
               </div>
               : <div className="right menu">
                 {/* The navbar will show these links before you log in */}
-                {/* <Menu.Item as={Button} onClick={props.generateRandomUser}>
-                  Log In As Random User
-                </Menu.Item> */}
-                {/* <Menu.Item as={Link} to="/login">Login</Menu.Item>
-                <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item> */}
                 <Menu.Item>
                   <Button onClick={() => onGoogleSignIn()}>
                   <Icon name="google" />Log In With Google

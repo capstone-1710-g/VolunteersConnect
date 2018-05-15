@@ -8,9 +8,8 @@ export default class MapMarker extends Component{
     super(props);
 
   }
-
+  
   onMarkerClick(eventId){
-    console.log('afaad')
     history.push('/events/' + eventId)
   }
   render(){
@@ -26,17 +25,6 @@ export default class MapMarker extends Component{
     )
 
     return (
-          // <i className="fa fa-map-marker"
-          //   style={{ width: 40, height: 40, left: -20, top: -20, position: 'absolute', fontSize: '30px', color: 'red' }}
-          //   onMouseEnter={this.onMarkerHover}
-          //   onMouseLeave={this.onMarkerLeave}
-          //   >
-          //   {this.state.showInfo && event &&
-          //     <Item >
-          //       <Item.Content header={event.title} />
-          //     </Item>
-          //   }
-          // </i>
           <div>
             {event &&
             <Popup trigger={marker} position='right center'>
